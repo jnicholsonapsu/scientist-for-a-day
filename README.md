@@ -8,7 +8,7 @@ Here are some resources if you are interested in learning more about math, art, 
 
 * The [Mathematical Art Galleries](https://gallery.bridgesmathart.org/) from the annual Bridges Conference on mathematical connections in art, music, architecture, and culture; and the annual Joint Mathematics Meetings, the world's largest mathematics gathering. 
 * Processing
-    * The [Processing website](https://processing.org/): the source for everything about Processing. From here, you can [download](https://processing.org/download) Processing, access documentation, find tutorials, and join the Processing community.
+    * The [Processing website](https://processing.org/) is the source for everything about Processing. From here, you can [download](https://processing.org/download) Processing, access documentation, find tutorials, and join the Processing community.
     * Daniel Shiffman's learning resources for Processing
         * Books
             * **Learning Processing, 2nd edition**, is an introductory book specifically geared towards people who do not know how to program. It covers how to program and how to use Processing.  Unfortunately, the author was not allowed to make this book available for free, so most people buy a copy.  You may be able to find it in some libraries.
