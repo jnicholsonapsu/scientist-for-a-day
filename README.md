@@ -1,6 +1,6 @@
 # Scientist for a day
 
-This is a collection of resources for the Scientist for a Day event where we explore make art using math and coding.
+This is a collection of resources for the **Scientist for a Day** event where we explore make art using math and coding.
 
 ## After the event
 
