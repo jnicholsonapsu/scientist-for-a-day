@@ -4,13 +4,14 @@
 
    Type the four lines that are colored below, that is,
    the setup() function.
-   
+
    You don't need to type the light gray text. Those are comments.
    They don't affect how the code works.
-   
+
    Then press PLAY (the triangle, top left).
 
-   You should get a grey window with a white circle in it.
+   You should get a grey window with a white circle in it. The
+   thin dark outline around the circle is Processing's default.
    =========================================================== */
 
 void setup() {
@@ -31,21 +32,25 @@ void setup() {
          200 = how wide
          200 = how tall
 
-   WATCH OUT: 
+   WATCH OUT:
        y counts DOWN from the top
-       
+
        (0, 0) is the top-left corner of the window.
 
-   CHANGE THE CODE:
-     ellipse(0, 0, 200, 200);       // change the numbers in ellipse()
-     
-     ellipse(300, 400, 400, 100);   // Change the numbers in ellipse()
+   TRY THESE (change or add a line, press PLAY, see what's different):
+
+     ellipse(0, 0, 200, 200);       // Change the numbers.
+                                    // Where does the circle go? Only a
+                                    // quarter of it is visible
+
+     ellipse(300, 400, 400, 100);   // Change the numbers.   
                                     // This function is really for
                                     // an ellipse. If the height and
                                     // width are the same, you get a
                                     // circle
-                                    
-     ellipse(100, 100, 50, 50);     // Add this extra line so that you see
-                                    // two ellipse() functions in setup()
-                                    
+
+     ellipse(100, 100, 50, 50);     // add this one, so that there
+                                    // are two ellipse() calls in
+                                    // setup()
+
    =========================================================== */
