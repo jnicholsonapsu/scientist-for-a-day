@@ -46,7 +46,6 @@ void setup() {
                                     // circle
                                     
      ellipse(100, 100, 50, 50);     // Add this extra line so that you see
-                                    // two ellipse() functions's 
-                                    // in setup()
+                                    // two ellipse() functions in setup()
                                     
    =========================================================== */
