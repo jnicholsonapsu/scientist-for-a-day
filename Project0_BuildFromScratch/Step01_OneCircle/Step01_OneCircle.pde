@@ -43,7 +43,7 @@ void setup() {
                                     // Where does the circle go? Only a
                                     // quarter of it is visible
 
-     ellipse(300, 400, 400, 100);   // Change the numbers.   
+     ellipse(300, 400, 400, 100);   // Change the numbers.
                                     // This function is really for
                                     // an ellipse. If the height and
                                     // width are the same, you get a
