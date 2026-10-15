@@ -32,16 +32,16 @@ void setup() {
   // ***** REPLACE WITH THESE NINE ****
   // **********************************
   int diameter = 160;
-  int x = 100;
-  int y = 400;
+  int centerX = 100;
+  int centerY = 400;
 
-  ellipse(x, y, diameter, diameter);
+  ellipse(centerX, centerY, diameter, diameter);
 
-  x = x + 200;
-  ellipse(x, y, diameter, diameter);
+  centerX = centerX + 200;
+  ellipse(centerX, centerY, diameter, diameter);
 
-  x = x + 200;
-  ellipse(x, y, diameter, diameter);
+  centerX = centerX + 200;
+  ellipse(centerX, centerY, diameter, diameter);
 }
 
 /* ===========================================================
@@ -61,10 +61,13 @@ void setup() {
 
    Now read the ellipse() line again:
 
-       ellipse(x, y, diameter, diameter);
+       ellipse(centerX, centerY, diameter, diameter);
 
    You can tell what every part is for without needing to
    remember specific values.
+
+   The names say centerX and centerY because ellipse()
+   measures from the middle of the circle, not from a corner.
 
    All three circles use the same diameter. Change that one
    line at the top to 100 and all three circles change.
@@ -77,17 +80,17 @@ void setup() {
 
    Look at this line:
 
-     x = x + 200
+     centerX = centerX + 200
 
    The = does not mean "is equal to". It means "work out the
    right side, then put the answer in the name on the left".
 
-   So x = x + 200 means: take whatever x is now, add 200, and
-   that becomes the new x.
+   So centerX = centerX + 200 means: take whatever centerX is
+   now, add 200, and that becomes the new centerX.
 
-       x starts at 100
-       x = x + 200   ->   x is now 300
-       x = x + 200   ->   x is now 500
+       centerX starts at 100
+       centerX = centerX + 200   ->   centerX is now 300
+       centerX = centerX + 200   ->   centerX is now 500
 
    Which is why the three circles land at 100, 300 and 500,
    without you typing those numbers anywhere.
@@ -101,21 +104,21 @@ void setup() {
      int diameter = 220;     // big enough that they overlap
 
      // -------------------------------------------------
-     // replace int y = 400; with this
+     // replace int centerY = 400; with this
 
-     int y = 200;            // the whole row moves up the page
+     int centerY = 200;      // the whole row moves up the page
 
      // -------------------------------------------------
-     // replace both x = x + 200; lines with one of these
+     // replace both centerX = centerX + 200; lines with one of these
 
-     x = x + 120;            // the circles bunch together
+     centerX = centerX + 120;   // the circles bunch together
 
-     x = x + 250;            // the last one runs off the edge
+     centerX = centerX + 250;   // the last one runs off the edge
 
      // -------------------------------------------------
      // add a fourth circle: copy these two lines onto the end
 
-     x = x + 200;
-     ellipse(x, y, diameter, diameter);
+     centerX = centerX + 200;
+     ellipse(centerX, centerY, diameter, diameter);
 
    =========================================================== */
