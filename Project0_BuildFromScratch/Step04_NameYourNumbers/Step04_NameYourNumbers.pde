@@ -52,29 +52,29 @@ void setup() {
        int diameter = 160;
 
    A variable has a name, for example, "diameter",
-   and we can assgn values to it, for example, 160. 
-   From then on, writing diameter is the same as 
+   and we can assign values to it, for example, 160.
+   From then on, writing diameter is the same as
    writing 160.
 
-   The "int" means the name holds a whole number. If you 
-   replace the 160 with 160.5, the code won't work. 
+   The "int" means the name holds a whole number. If you
+   replace the 160 with 160.5, the code won't work.
 
    Now read the ellipse() line again:
 
        ellipse(x, y, diameter, diameter);
 
-   You can tell what every part is for without needeing to
+   You can tell what every part is for without needing to
    remember specific values.
 
    All three circles use the same diameter. Change that one
    line at the top to 100 and all three circles change.
 
-   That is the real reason to name a number. A number can 
+   That is the real reason to name a number. A number can
    be written in one place, but we can use a variable, which
    has a name, everywhere the number is needed.
-   
-   CHANGIN VARIBLES
-   
+
+   CHANGING VARIABLES
+
    Look at this line:
 
      x = x + 200

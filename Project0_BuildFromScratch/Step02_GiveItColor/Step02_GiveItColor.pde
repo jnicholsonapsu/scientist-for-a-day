@@ -85,8 +85,4 @@ void setup() {
                              // because stroke(30) is the same grey.
                              // Does the circle still read well?
 
-   It is often hard to guess what (12, 200, 190)
-   looks like without running it. We'll deal with that later in
-   an upcoming step.
-
    =========================================================== */

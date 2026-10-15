@@ -4,9 +4,8 @@
 
    We want a row of circles across the page.
 
-   Replace your one ellipse() line with these three. Type all
-   three out, even though it is repetitive. The next step
-   depends on you having felt the repetition.
+   Replace your one ellipse() line with the three new ellipse()
+   lines below.
 
    =========================================================== */
 
@@ -46,7 +45,7 @@ void setup() {
      fill(60, 120, 180);     // only the circles BELOW this line
                              // change. The first one was already
                              // drawn, so it keeps the old color
-                             
+
      // Try adding a different fill() for each circle.
 
      // -------------------------------------------------
@@ -54,7 +53,7 @@ void setup() {
 
      ellipse(100, 400, 160, 160);   // By adjusting the values
      ellipse(300, 300, 160, 160);   // we can reposition the shapes.
-     ellipse(500, 200, 160, 160);   
-                                    
+     ellipse(500, 200, 160, 160);
+
 
    =========================================================== */
