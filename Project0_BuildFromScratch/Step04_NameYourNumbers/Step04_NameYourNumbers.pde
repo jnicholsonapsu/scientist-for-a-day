@@ -15,8 +15,8 @@
    So we give the numbers names first, and use the names
    instead.
 
-   Replace your three ellipse() lines with everything inside
-   the box below.
+   Replace your three ellipse() lines with the marked lines
+   below.
 
    =========================================================== */
 
