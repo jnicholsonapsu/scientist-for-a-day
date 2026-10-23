@@ -40,9 +40,9 @@ void setup() {
   // *********************************
   // ***** ADD THESE THREE LINES *****
   // *********************************
-  color firstBoxColor  = color(230,  57,  70);
+  color firstBoxColor  = color(233, 196, 106);
   color secondBoxColor = color( 38,  70,  83);
-  color circleColor    = color(250, 247, 240);
+  color circleColor    = color(230,  80,  70);
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
@@ -92,7 +92,7 @@ void setup() {
 
    A NEW TYPE: color
 
-       color firstBoxColor = color(230, 57, 70);
+       color firstBoxColor = color(233, 196, 106);
 
    color is a type, the same way int and float are types, and
    a variable of that type holds one color.
@@ -103,6 +103,10 @@ void setup() {
 
    Naming them means the same color can be used in more than
    one place, and changed from one line.
+
+   circleColor is the same red the circles have been since
+   step 2. It has to differ from both box colors, or half the
+   circles would sink into the boxes behind them.
 
    if AND else
 
@@ -152,19 +156,28 @@ void setup() {
      // -------------------------------------------------
      // replace the three colors with one of these sets
 
-     color firstBoxColor  = color(233, 196, 106);
-     color secondBoxColor = color( 42, 157, 143);
-     color circleColor    = color( 38,  70,  83);
-                                 // gold and teal boxes, dark blue
-                                 // circles. Softer, and the circles
-                                 // sit on the boxes rather than
-                                 // cutting through them
+     color firstBoxColor  = color(230,  57,  70);
+     color secondBoxColor = color( 38,  70,  83);
+     color circleColor    = color(233, 196, 106);
+                                 // red and dark blue boxes, gold
+                                 // circles
 
      color firstBoxColor  = color( 26,  26,  26);
-     color secondBoxColor = color(250, 247, 240);
-     color circleColor    = color(230,  57,  70);
-                                 // black and off-white boxes, red
+     color secondBoxColor = color(141, 153, 174);
+     color circleColor    = color(230,  80,  70);
+                                 // near-black and grey boxes, red
                                  // circles
+
+     color firstBoxColor  = color( 42, 157, 143);
+     color secondBoxColor = color(233, 196, 106);
+     color circleColor    = color(230,  80,  70);
+                                 // teal and gold boxes, red circles.
+                                 // All three are strong, so the
+                                 // picture is louder than the others
+
+   Whatever three you pick, keep all of them different from
+   the paper color. Anything that matches the paper disappears
+   once the outlines come off.
 
      // -------------------------------------------------
      // replace float sizeRatio = 0.7; with one of these
