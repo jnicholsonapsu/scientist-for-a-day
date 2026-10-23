@@ -10,7 +10,7 @@
    computer repeat them.
 
    Replace everything from int diameter down to the last
-   ellipse() with the lines in the box.
+   ellipse() with the marked lines below.
 
    =========================================================== */
 

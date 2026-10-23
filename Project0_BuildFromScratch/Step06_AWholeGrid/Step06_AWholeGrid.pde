@@ -5,8 +5,8 @@
    One row was one loop. A page of rows is a loop inside a
    loop.
 
-   Replace your loop, and the lines just above it, with
-   everything in the box.
+   Replace your loop, and the lines just above it, with the
+   marked lines below.
 
    =========================================================== */
 
