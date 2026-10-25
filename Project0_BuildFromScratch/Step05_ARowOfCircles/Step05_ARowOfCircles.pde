@@ -26,13 +26,13 @@ void setup() {
   // ***** REPLACE WITH THESE *******
   // ********************************
   int numberOfColumns = 5;
-  float boxWidth = width / numberOfColumns;
+  float cellWidth = width / numberOfColumns;
   float sizeRatio = 0.9;
-  float diameter = boxWidth * sizeRatio;
+  float diameter = cellWidth * sizeRatio;
   float centerY = height / 2;
 
   for (int column = 0; column < numberOfColumns; column++) {
-    float centerX = column * boxWidth + boxWidth / 2;
+    float centerX = column * cellWidth + cellWidth / 2;
     ellipse(centerX, centerY, diameter, diameter);
   }
 }
@@ -49,18 +49,25 @@ void setup() {
    Using them instead of typing 600 and 800 means the row
    still works if you change the size() line later.
 
-   DIVIDING THE PAGE INTO BOXES
+   float
 
-       float boxWidth = width / numberOfColumns;
+   In step 4, int could only hold a whole number. float holds
+   a number that can have a decimal point, like 0.9. sizeRatio
+   needs that, and so does anything worked out from it, such
+   as diameter.
 
-   Imagine the page cut into 5 equal boxes, one per circle.
-   Each box is 600 / 5 = 120 wide. Nothing draws the boxes;
+   DIVIDING THE PAGE INTO CELLS
+
+       float cellWidth = width / numberOfColumns;
+
+   Imagine the page cut into 5 equal cells, one per circle.
+   Each cell is 600 / 5 = 120 wide. Nothing draws the cells;
    they are just a way to work out where things go.
 
-       float diameter = boxWidth * sizeRatio;
+       float diameter = cellWidth * sizeRatio;
 
-   sizeRatio is how much of its box each circle fills. At 0.9
-   the circle is a little smaller than its box, which leaves
+   sizeRatio is how much of its cell each circle fills. At 0.9
+   the circle is a little smaller than its cell, which leaves
    the gaps you can see.
 
    HOW TO READ A for LOOP
@@ -87,10 +94,10 @@ void setup() {
    a time. Here the loop gives you a counter, and the position
    is worked out from it:
 
-       float centerX = column * boxWidth + boxWidth / 2;
+       float centerX = column * cellWidth + cellWidth / 2;
 
-   column * boxWidth is the left edge of this circle's box.
-   Adding half a box moves it to the middle, because ellipse()
+   column * cellWidth is the left edge of this circle's cell.
+   Adding half a cell moves it to the middle, because ellipse()
    measures from the center.
 
        column = 0  ->  centerX =  60
@@ -111,7 +118,7 @@ void setup() {
      int numberOfColumns = 12;   // more, smaller circles
 
      int numberOfColumns = 20;   // they still all fit, because
-                                 // the boxes got narrower too
+                                 // the cells got narrower too
 
      // -------------------------------------------------
      // replace float sizeRatio = 0.9; with one of these
@@ -122,7 +129,7 @@ void setup() {
                                  // width, touching each other and
                                  // both page edges
 
-     float sizeRatio = 1.3;      // too big for their boxes, so
+     float sizeRatio = 1.3;      // too big for their cells, so
                                  // they overlap and spill off
                                  // the sides
 

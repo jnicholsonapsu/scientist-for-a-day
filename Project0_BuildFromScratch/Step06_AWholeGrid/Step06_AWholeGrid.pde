@@ -23,16 +23,16 @@ void setup() {
   // ***************************************
   int numberOfColumns = 6;
   int numberOfRows = 8;
-  float boxWidth = width / numberOfColumns;
-  float boxHeight = height / numberOfRows;
+  float cellWidth = width / numberOfColumns;
+  float cellHeight = height / numberOfRows;
   float sizeRatio = 0.9;
-  float diameter = min(boxWidth, boxHeight) * sizeRatio;
+  float diameter = min(cellWidth, cellHeight) * sizeRatio;
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
 
-      float centerX = column * boxWidth + boxWidth / 2;
-      float centerY = row * boxHeight + boxHeight / 2;
+      float centerX = column * cellWidth + cellWidth / 2;
+      float centerY = row * cellHeight + cellHeight / 2;
 
       ellipse(centerX, centerY, diameter, diameter);
     }
@@ -42,24 +42,24 @@ void setup() {
 /* ===========================================================
    Notes:
 
-   BOXES IN BOTH DIRECTIONS
+   CELLS IN BOTH DIRECTIONS
 
-   In step 5 you cut the page into 5 boxes across. Now it is
+   In step 5 you cut the page into 5 cells across. Now it is
    cut both ways:
 
-       float boxWidth  = width / numberOfColumns;
-       float boxHeight = height / numberOfRows;
+       float cellWidth  = width / numberOfColumns;
+       float cellHeight = height / numberOfRows;
 
-   600 / 6 = 100 wide, and 800 / 8 = 100 tall, so these boxes
+   600 / 6 = 100 wide, and 800 / 8 = 100 tall, so these cells
    happen to be square.
 
    They will not always be square, so the diameter is worked
    out from whichever side is smaller:
 
-       float diameter = min(boxWidth, boxHeight) * sizeRatio;
+       float diameter = min(cellWidth, cellHeight) * sizeRatio;
 
    min() gives the smaller of two numbers. Using it means a
-   circle always fits inside its box, whatever shape the box
+   circle always fits inside its cell, whatever shape the cell
    turns out to be.
 
    WHAT THE NESTED LOOP DOES
@@ -81,8 +81,8 @@ void setup() {
    In step 5, centerY was one fixed number, because every
    circle sat at the same height.
 
-       float centerX = column * boxWidth + boxWidth / 2;
-       float centerY = row * boxHeight + boxHeight / 2;
+       float centerX = column * cellWidth + cellWidth / 2;
+       float centerY = row * cellHeight + cellHeight / 2;
 
    Now it is worked out from row, exactly the way centerX is
    worked out from column. Two counters, two directions, the
@@ -97,18 +97,18 @@ void setup() {
 
      int numberOfColumns = 12;  int numberOfRows = 16;
                                  // four times as many, and they
-                                 // still fit, because the boxes
+                                 // still fit, because the cells
                                  // got smaller too
 
      // -------------------------------------------------
      // replace int numberOfRows = 8; alone, leaving the columns
 
-     int numberOfRows = 4;       // the boxes are now twice as
+     int numberOfRows = 4;       // the cells are now twice as
                                  // tall as they are wide, so the
                                  // circles get spread apart
                                  // down the page
 
-     int numberOfRows = 20;      // short, wide boxes. The circles
+     int numberOfRows = 20;      // short, wide cells. The circles
                                  // shrink to fit their height,
                                  // which leaves gaps to the left
                                  // and right of each one

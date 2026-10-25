@@ -28,30 +28,30 @@ void setup() {
 
   int numberOfColumns = 6;
   int numberOfRows = 8;
-  float boxWidth = width / numberOfColumns;
-  float boxHeight = height / numberOfRows;
+  float cellWidth = width / numberOfColumns;
+  float cellHeight = height / numberOfRows;
   float sizeRatio = 0.7;
-  float diameter = min(boxWidth, boxHeight) * sizeRatio;
+  float diameter = min(cellWidth, cellHeight) * sizeRatio;
 
-  color firstBoxColor  = color(233, 196, 106);
-  color secondBoxColor = color( 38,  70,  83);
+  color firstCellColor  = color(233, 196, 106);
+  color secondCellColor = color( 38,  70,  83);
   color circleColor    = color(230,  80,  70);
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
 
-      float centerX = column * boxWidth + boxWidth / 2;
-      float centerY = row * boxHeight + boxHeight / 2;
+      float centerX = column * cellWidth + cellWidth / 2;
+      float centerY = row * cellHeight + cellHeight / 2;
 
       // *****************************************
       // ***** CHANGE THIS LINE TO ADD + row *****
       // *****************************************
       if ((column + row) % 2 == 0) {
-        fill(firstBoxColor);
+        fill(firstCellColor);
       } else {
-        fill(secondBoxColor);
+        fill(secondCellColor);
       }
-      rect(centerX, centerY, boxWidth, boxHeight);
+      rect(centerX, centerY, cellWidth, cellHeight);
 
       fill(circleColor);
       ellipse(centerX, centerY, diameter, diameter);
@@ -74,7 +74,7 @@ void setup() {
    edge was doing real work. Two circles side by side would
    otherwise have read as one shape.
 
-   From step 7 the box colors took that job over. Gold sits
+   From step 7 the cell colors took that job over. Gold sits
    next to dark blue everywhere, so the edges show up without
    any help, and the dark line on top of them is one thing too
    many.
@@ -88,7 +88,7 @@ void setup() {
 
    Try the same thing with the old column % 2 version and the
    difference is obvious: a whole column becomes one solid
-   stripe of color, because every box in it is the same and
+   stripe of color, because every cell in it is the same and
    nothing divides them any more.
 
    Neither version is the correct one. Outlines make a piece
@@ -103,7 +103,7 @@ void setup() {
      if (row % 2 == 0) {         // solid stripes across it
 
      if ((column + row) % 3 == 0) {
-                                 // only a third of the boxes get
+                                 // only a third of the cells get
                                  // the first color, in diagonal
                                  // bands
 

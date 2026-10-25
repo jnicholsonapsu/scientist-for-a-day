@@ -28,9 +28,9 @@ void setup() {
   stroke(30);
   strokeWeight(3);
 
-  // **********************************
-  // ***** REPLACE WITH THESE NINE ****
-  // **********************************
+  // ************************************
+  // ***** REPLACE WITH THESE EIGHT *****
+  // ************************************
   int diameter = 160;
   int centerX = 100;
   int centerY = 400;
