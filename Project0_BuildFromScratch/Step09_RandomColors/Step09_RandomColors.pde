@@ -41,7 +41,7 @@ void setup() {
     color(244, 162,  97),   // orange
     color( 42, 157, 143),   // teal
     color( 38,  70,  83),   // dark blue
-    color(233, 196, 106)    // gold
+    color(233, 196, 106),   // gold
   };
 
   for (int column = 0; column < numberOfColumns; column++) {
@@ -95,21 +95,21 @@ void setup() {
      color(141, 153, 174),   // light grey
      color( 92, 103, 125),   // grey
      color(239,  35,  60),   // red
-     color(217,   4,  41)    // deep red
+     color(217,   4,  41),   // deep red
                              // one bright color against greys
 
      color( 96, 108,  56),   // olive
      color( 40,  54,  24),   // dark green
      color(183, 163, 111),   // khaki
      color(221, 161,  94),   // sand
-     color(188, 108,  37)    // rust
+     color(188, 108,  37),   // rust
                              // earth tones
 
      color(230,  57,  70),   // red
      color(230,  57,  70),   // red
      color(230,  57,  70),   // red
      color( 38,  70,  83),   // dark blue
-     color(233, 196, 106)    // gold
+     color(233, 196, 106),   // gold
                              // the red is listed three times, so it
                              // comes up more often than the others
 
@@ -120,7 +120,7 @@ void setup() {
        color(230,  57,  70),   // red
        color(244, 162,  97),   // orange
        color( 42, 157, 143),   // teal
-       color( 38,  70,  83)    // dark blue
+       color( 38,  70,  83),   // dark blue
      };                        // still works, because of
                                // palette.length
 
