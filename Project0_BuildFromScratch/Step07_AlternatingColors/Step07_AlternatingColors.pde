@@ -22,8 +22,7 @@ void setup() {
   size(600, 800);
 
   background(250, 247, 240);
-  stroke(30);
-  strokeWeight(3);
+  noStroke();
 
   // **************************
   // ***** ADD THIS LINE ******
@@ -176,8 +175,8 @@ void setup() {
                                  // picture is louder than the others
 
    Whatever three you pick, keep all of them different from
-   the paper color. Anything that matches the paper disappears
-   if the outlines are missing.
+   the paper color. Anything that matches the paper
+   disappears.
 
      // -------------------------------------------------
      // replace float sizeRatio = 0.7; with one of these

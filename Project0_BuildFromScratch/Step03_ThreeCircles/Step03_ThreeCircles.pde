@@ -14,8 +14,7 @@ void setup() {
 
   background(250, 247, 240);
   fill(230, 80, 70);
-  stroke(30);
-  strokeWeight(3);
+  noStroke();
 
   // ******************************************
   // ***** REPLACE WITH THESE THREE LINES *****
@@ -35,8 +34,7 @@ void setup() {
 
    fill() does not draw anything. It sets the color that every
    shape after it will use, and it keeps that setting until
-   another fill() changes it. The same is true of stroke() and
-   strokeWeight().
+   another fill() changes it.
 
    TRY THESE:
      // -------------------------------------------------

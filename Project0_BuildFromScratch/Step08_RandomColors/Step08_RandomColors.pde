@@ -1,5 +1,5 @@
 /* ===========================================================
-   STEP 9 — RANDOM COLORS
+   STEP 8 — RANDOM COLORS
    ===========================================================
 
    In all the previous steps, colors were all set by rules.

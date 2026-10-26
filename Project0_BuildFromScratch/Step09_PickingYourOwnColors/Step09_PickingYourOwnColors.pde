@@ -1,5 +1,5 @@
 /* ===========================================================
-   STEP 10 — PICKING YOUR OWN COLORS
+   STEP 9 — PICKING YOUR OWN COLORS
    ===========================================================
 
    In this step, you pick your own colors.
@@ -100,6 +100,6 @@ void setup() {
    colors. Any of the other rules on the Pikka page will work
    too. Just make sure your palette has one color line for
    each color the rule gives you. The palette.length takes
-   care of the rest, as in step 9.
+   care of the rest, as in step 8.
 
    =========================================================== */

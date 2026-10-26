@@ -2,7 +2,8 @@
    STEP 2 — GIVE IT COLOR
    ===========================================================
 
-   Add the four new lines above the ellipse() line.
+   Change the background() line to the paper color, and add
+   the fill() line below it.
 
    Order matters. Processing runs functions in the order you write
    them, so background() has to come first. If it comes last,
@@ -13,13 +14,13 @@
 void setup() {
   size(600, 800);
 
-  // ********************************
-  // ***** ADD THESE FOUR LINES *****
-  // ********************************
+  // **********************************************
+  // ***** CHANGE background() AND ADD fill() *****
+  // **********************************************
   background(250, 247, 240);   // paper color
   fill(230, 80, 70);           // inside of the circle
-  stroke(30);                  // outline color
-  strokeWeight(3);             // outline thickness
+
+  noStroke();
 
   ellipse(300, 400, 200, 200);
 }
@@ -27,7 +28,7 @@ void setup() {
 /* ===========================================================
    Notes:
 
-   background(), fill(), and stroke() are all setting colors.
+   background() and fill() both set colors.
 
    In the starter code, background() and fill() each have 3 numbers.
    The numbers represent 3 color channels: RED, GREEN, BLUE.
@@ -42,18 +43,15 @@ void setup() {
        (0, 0, 0)         black
        (255, 255, 255)   white
 
-   In the starter code, stroke() only has one number.
    When there is only one number for a color, you get a grey:
 
-       stroke(30)   is the same as   stroke(30, 30, 30)
+       fill(100)   is the same as   fill(100, 100, 100)
 
-   You can use 1 number or 3 numbers with background(),
-   fill(), and stroke()
+   You can use 1 number or 3 numbers with background() and
+   fill().
 
-   In step 1 you got a white circle with a thin black outline
-   without asking for either. Those are Processing's defaults,
-   and the lines you just added replace them.
-
+   In step 1 you got a white circle without asking for one.
+   White is Processing's default, and fill() replaces it.
 
    TRY THESE:
      // -------------------------------------------------
@@ -65,24 +63,9 @@ void setup() {
 
      fill(100, 100, 100);    // same as fill(100)
 
-     noFill();               // an empty ring, paper showing
-                             // through the middle
-
-     // -------------------------------------------------
-     // replace stroke(30); with this
-
-     noStroke();             // removes the outline
-
-     // -------------------------------------------------
-     // replace strokeWeight(3); with this
-
-     strokeWeight(20);       // very heavy outline
-
      // -------------------------------------------------
      // replace background(250, 247, 240); with this
 
-     background(30);         // dark paper. The outline disappears,
-                             // because stroke(30) is the same grey.
-                             // Does the circle still read well?
+     background(30);         // dark paper
 
    =========================================================== */

@@ -25,8 +25,7 @@ void setup() {
 
   background(250, 247, 240);
   fill(230, 80, 70);
-  stroke(30);
-  strokeWeight(3);
+  noStroke();
 
   // ************************************
   // ***** REPLACE WITH THESE EIGHT *****
