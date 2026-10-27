@@ -5,28 +5,49 @@
    One row was one loop. A page of rows is a loop inside a
    loop.
 
-   Replace your loop, and the lines just above it, with the
-   marked lines below.
+   Replace THE ROW, the lines under WORKED OUT FROM THE
+   NUMBERS ABOVE, and your loop with the marked lines below.
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
 
+// **************************************
+// ***** REPLACE THE ROW WITH THESE *****
+// **************************************
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+float sizeRatio = 0.9;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+// ******************************
+// ***** REPLACE WITH THESE *****
+// ******************************
+float cellWidth = pageWidth / numberOfColumns;
+float cellHeight = pageHeight / numberOfRows;
+float diameter = min(cellWidth, cellHeight) * sizeRatio;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   fill(230, 80, 70);
   noStroke();
 
-  // ***************************************
-  // ***** REPLACE WITH THIS NEW LOOP ******
-  // ***************************************
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-  float cellWidth = width / numberOfColumns;
-  float cellHeight = height / numberOfRows;
-  float sizeRatio = 0.9;
-  float diameter = min(cellWidth, cellHeight) * sizeRatio;
-
+  // **************************************
+  // ***** REPLACE WITH THIS NEW LOOP *****
+  // **************************************
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
 
@@ -46,8 +67,8 @@ void setup() {
    In step 5 you cut the page into 6 cells across. Now it is
    cut both ways:
 
-       float cellWidth  = width / numberOfColumns;
-       float cellHeight = height / numberOfRows;
+       float cellWidth  = pageWidth / numberOfColumns;
+       float cellHeight = pageHeight / numberOfRows;
 
    612 / 6 = 102 wide, and 792 / 8 = 99 tall, so these cells
    are nearly square.

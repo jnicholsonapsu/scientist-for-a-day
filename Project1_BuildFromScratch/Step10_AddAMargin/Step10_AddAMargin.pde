@@ -10,44 +10,58 @@
 
    Three things to do:
      - add the pageMargin line
-     - replace the lines from cellWidth down to diameter
-       with the marked lines
+     - replace the lines under WORKED OUT FROM THE NUMBERS
+       ABOVE with the marked lines
      - change the two lines that work out centerX and centerY
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+// *************************
+// ***** ADD THIS LINE *****
+// *************************
+float pageMargin = 72;   // 1 inch when printed
 
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+float sizeRatio = 1.0;
+
+// ---------- THE LOOK ------------------------------------
+color[] palette = {
+  color( 50,  50, 149),
+  color(149,  50,  99),
+  color(149, 149,  50),
+  color( 50, 149,  99),
+};
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+// ******************************************
+// ***** REPLACE THESE LINES WITH THESE *****
+// ******************************************
+float drawingWidth = pageWidth - 2 * pageMargin;
+float drawingHeight = pageHeight - 2 * pageMargin;
+float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
+float diameter = cellSize * sizeRatio;
+
+float gridLeft = (pageWidth - numberOfColumns * cellSize) / 2;
+float gridTop = (pageHeight - numberOfRows * cellSize) / 2;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   noStroke();
-
-  // *************************
-  // ***** ADD THIS LINE *****
-  // *************************
-  float pageMargin = 72;   // 1 inch when printed
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-
-  // *********************************************************
-  // ***** REPLACE cellWidth DOWN TO diameter WITH THESE *****
-  // *********************************************************
-  float drawingWidth = width - 2 * pageMargin;
-  float drawingHeight = height - 2 * pageMargin;
-  float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
-  float sizeRatio = 1.0;
-  float diameter = cellSize * sizeRatio;
-
-  float gridLeft = (width - numberOfColumns * cellSize) / 2;
-  float gridTop = (height - numberOfRows * cellSize) / 2;
-
-  color[] palette = {
-    color( 50,  50, 149),
-    color(149,  50,  99),
-    color(149, 149,  50),
-    color( 50, 149,  99),
-  };
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
@@ -98,8 +112,8 @@ void setup() {
    6 cells of 78 make the grid 468 wide, and 8 cells make it
    624 tall. That leaves space the grid does not use:
 
-       float gridLeft = (width - numberOfColumns * cellSize) / 2;
-       float gridTop  = (height - numberOfRows * cellSize) / 2;
+       float gridLeft = (pageWidth - numberOfColumns * cellSize) / 2;
+       float gridTop  = (pageHeight - numberOfRows * cellSize) / 2;
 
    Each line takes that leftover space and splits it in half,
    so the grid sits in the middle of the page:

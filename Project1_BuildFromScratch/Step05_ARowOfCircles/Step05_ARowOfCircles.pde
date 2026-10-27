@@ -9,27 +9,48 @@
    A loop is how you write those lines once and have the
    computer repeat them.
 
-   Replace everything from int diameter down to the last
-   ellipse() with the marked lines below.
+   Two things to do:
+     - replace THE CIRCLES with THE ROW, and add the lines
+       under WORKED OUT FROM THE NUMBERS ABOVE
+     - replace everything from the first ellipse() down to
+       the last one with the loop
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
 
+// ******************************************
+// ***** REPLACE THE CIRCLES WITH THESE *****
+// ******************************************
+// ---------- THE ROW -------------------------------------
+int numberOfColumns = 6;
+float sizeRatio = 0.9;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float cellWidth = pageWidth / numberOfColumns;
+float diameter = cellWidth * sizeRatio;
+float centerY = pageHeight / 2;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   fill(230, 80, 70);
   noStroke();
 
-  // ********************************
-  // ***** REPLACE WITH THESE *******
-  // ********************************
-  int numberOfColumns = 6;
-  float cellWidth = width / numberOfColumns;
-  float sizeRatio = 0.9;
-  float diameter = cellWidth * sizeRatio;
-  float centerY = height / 2;
-
+  // ******************************************************
+  // ***** REPLACE THE ellipse() LINES WITH THIS LOOP *****
+  // ******************************************************
   for (int column = 0; column < numberOfColumns; column++) {
     float centerX = column * cellWidth + cellWidth / 2;
     ellipse(centerX, centerY, diameter, diameter);
@@ -39,14 +60,18 @@ void setup() {
 /* ===========================================================
    Notes:
 
-   width AND height
+   WORKED OUT FROM THE NUMBERS ABOVE
 
-   You never declared these two, but you can use them anyway.
-   Processing makes them for you out of the size() line, so
-   width is 612 and height is 792.
+   The variables in this part are calculated from the ones
+   above them. You don't change these. Change the numbers
+   above, and these follow.
 
-   Using them instead of typing 612 and 792 means the row
-   still works if you change the size() line later.
+   Processing fills in these variables from top to bottom, so
+   each one can only use the lines above it.
+
+   Using pageWidth and pageHeight instead of typing 612 and
+   792 means the row still works if you change the page
+   size later.
 
    float
 
@@ -57,7 +82,7 @@ void setup() {
 
    DIVIDING THE PAGE INTO CELLS
 
-       float cellWidth = width / numberOfColumns;
+       float cellWidth = pageWidth / numberOfColumns;
 
    Imagine the page cut into 6 equal cells, one per circle.
    Each cell is 612 / 6 = 102 wide. Nothing draws the cells;
@@ -91,7 +116,7 @@ void setup() {
 
    In step 4 you moved the circle along yourself, one line at
    a time. Here the loop gives you a counter, and the position
-   is worked out from it:
+   is worked out from it inside the loop:
 
        float centerX = column * cellWidth + cellWidth / 2;
 
@@ -134,14 +159,15 @@ void setup() {
                                  // the sides
 
      // -------------------------------------------------
-     // replace float centerY = height / 2; with one of these
+     // replace float centerY = pageHeight / 2; with one of these
 
-     float centerY = height / 4;   // the row moves up the page
+     float centerY = pageHeight / 4;   // the row moves up the page
 
-     float centerY = 100;          // near the top. Any number
-                                   // works here, but height / 2
-                                   // stays centered if you change
-                                   // the size() line
+     float centerY = 100;              // near the top. Any number
+                                       // works here, but
+                                       // pageHeight / 2 stays
+                                       // centered if you change
+                                       // pageHeight
 
      // -------------------------------------------------
      // add this line inside the loop, just above ellipse()

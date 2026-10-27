@@ -9,39 +9,58 @@
    even columns get one color, odd columns get the other. The
    circle is drawn on top afterwards.
 
-   Three things to do:
-     - add rectMode(CENTER); and change sizeRatio to 0.7
-     - delete the fill(230, 80, 70); line, and add the three
-       color lines in its place
+   Four things to do:
+     - change sizeRatio to 0.7
+     - add THE LOOK, with its three color lines
+     - delete the fill(230, 80, 70); line, and add
+       rectMode(CENTER); in its place
      - add the if / else and the two drawing lines inside the
        inner loop
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
 
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+// ****************************
+// ***** CHANGE THIS LINE *****
+// ****************************
+float sizeRatio = 0.7;
+
+// ***************************
+// ***** ADD THESE LINES *****
+// ***************************
+// ---------- THE LOOK ------------------------------------
+color firstCellColor  = color(233, 196, 106);
+color secondCellColor = color( 38,  70,  83);
+color circleColor     = color(230,  80,  70);
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float cellWidth = pageWidth / numberOfColumns;
+float cellHeight = pageHeight / numberOfRows;
+float diameter = min(cellWidth, cellHeight) * sizeRatio;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   noStroke();
-
-  // **************************
-  // ***** ADD THIS LINE ******
-  // **************************
+  // *************************
+  // ***** ADD THIS LINE *****
+  // *************************
   rectMode(CENTER);       // measure cells from the middle
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-  float cellWidth = width / numberOfColumns;
-  float cellHeight = height / numberOfRows;
-  float sizeRatio = 0.7;
-  float diameter = min(cellWidth, cellHeight) * sizeRatio;
-
-  // *********************************
-  // ***** ADD THESE THREE LINES *****
-  // *********************************
-  color firstCellColor  = color(233, 196, 106);
-  color secondCellColor = color( 38,  70,  83);
-  color circleColor    = color(230,  80,  70);
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
@@ -49,9 +68,9 @@ void setup() {
       float centerX = column * cellWidth + cellWidth / 2;
       float centerY = row * cellHeight + cellHeight / 2;
 
-      // ***********************************
-      // ***** ADD EVERYTHING BELOW ********
-      // ***********************************
+      // ********************************
+      // ***** ADD EVERYTHING BELOW *****
+      // ********************************
       if (column % 2 == 0) {
         fill(firstCellColor);
       } else {
@@ -157,19 +176,19 @@ void setup() {
 
      color firstCellColor  = color(230,  57,  70);
      color secondCellColor = color( 38,  70,  83);
-     color circleColor    = color(233, 196, 106);
+     color circleColor     = color(233, 196, 106);
                                  // red and dark blue cells, gold
                                  // circles
 
      color firstCellColor  = color( 26,  26,  26);
      color secondCellColor = color(141, 153, 174);
-     color circleColor    = color(230,  80,  70);
+     color circleColor     = color(230,  80,  70);
                                  // near-black and grey cells, red
                                  // circles
 
      color firstCellColor  = color( 42, 157, 143);
      color secondCellColor = color(233, 196, 106);
-     color circleColor    = color(230,  80,  70);
+     color circleColor     = color(230,  80,  70);
                                  // teal and gold cells, red circles.
                                  // All three are strong, so the
                                  // picture is louder than the others

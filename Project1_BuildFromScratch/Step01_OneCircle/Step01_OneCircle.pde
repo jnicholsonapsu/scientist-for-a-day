@@ -2,8 +2,8 @@
    STEP 1 — ONE CIRCLE
    ===========================================================
 
-   Type the six lines that are colored below, that is,
-   the setup() function.
+   Type the code below: the three functions settings(),
+   setup() and draw().
 
    You don't need to type the light gray text. Those are comments.
    They don't affect how the code works.
@@ -13,8 +13,16 @@
    You should get a blue window with a white circle in it.
    =========================================================== */
 
-void setup() {
+void settings() {
   size(612, 792);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(40, 90, 170);
   noStroke();
   ellipse(300, 400, 200, 200);
@@ -23,9 +31,28 @@ void setup() {
 /* ===========================================================
    Notes:
 
+   settings(), setup() AND draw()
+
+   Processing runs these three functions for you, in this
+   order:
+
+       settings()   sets up the window
+       setup()      runs once, before any drawing
+       draw()       does the drawing
+
+   Normally draw() runs over and over, many times a second.
+   noLoop() in setup() stops that, so draw() runs once and
+   then waits.
+
    size(612, 792);
        Make a window 612 wide and 792 tall, the shape of a
        sheet of letter paper.
+
+   pixelDensity(1);
+       Some screens, such as most Macs, pack two pixels into
+       every point of the window. This line makes every
+       screen use one, so the sketch behaves the same on all
+       of them.
 
    background(40, 90, 170);
        Fill the whole window with one color. These three
@@ -60,7 +87,7 @@ void setup() {
 
      ellipse(100, 100, 50, 50);     // add this one, so that there
                                     // are two ellipse() calls in
-                                    // setup()
+                                    // draw()
 
      // -------------------------------------------------
      // delete noStroke(); and run it

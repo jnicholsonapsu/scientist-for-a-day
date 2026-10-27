@@ -7,44 +7,65 @@
 
    Keep your palette from step 9.
 
-   Three things to do:
-     - replace noStroke(); with the two marked lines
+   Four things to do:
      - change sizeRatio to 0.85
+     - add the strokeThickness line
+     - replace noStroke(); with strokeWeight(strokeThickness);
      - add the two stroke lines inside the inner loop
 
    =========================================================== */
 
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+float pageMargin = 72;   // 1 inch when printed
+
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+// ****************************
+// ***** CHANGE THIS LINE *****
+// ****************************
+float sizeRatio = 0.85;   // leaves room for the outline
+
+// ---------- THE LOOK ------------------------------------
+color[] palette = {
+  color( 50,  50, 149),
+  color(149,  50,  99),
+  color(149, 149,  50),
+  color( 50, 149,  99),
+};
+
+// *************************
+// ***** ADD THIS LINE *****
+// *************************
+float strokeThickness = 10;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float drawingWidth = pageWidth - 2 * pageMargin;
+float drawingHeight = pageHeight - 2 * pageMargin;
+float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
+float diameter = cellSize * sizeRatio;
+
+float gridLeft = (pageWidth - numberOfColumns * cellSize) / 2;
+float gridTop = (pageHeight - numberOfRows * cellSize) / 2;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
 void setup() {
-  size(612, 792);
+  noLoop();   // draw once, then wait
+}
 
+void draw() {
   background(250, 247, 240);
-
-  // *****************************************
-  // ***** REPLACE noStroke() WITH THESE *****
-  // *****************************************
-  float strokeThickness = 10;
+  // ****************************************
+  // ***** REPLACE noStroke() WITH THIS *****
+  // ****************************************
   strokeWeight(strokeThickness);
-
-  float pageMargin = 72;   // 1 inch when printed
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-
-  float drawingWidth = width - 2 * pageMargin;
-  float drawingHeight = height - 2 * pageMargin;
-  float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
-  float sizeRatio = 0.85;   // leaves room for the outline
-  float diameter = cellSize * sizeRatio;
-
-  float gridLeft = (width - numberOfColumns * cellSize) / 2;
-  float gridTop = (height - numberOfRows * cellSize) / 2;
-
-  color[] palette = {
-    color( 50,  50, 149),
-    color(149,  50,  99),
-    color(149, 149,  50),
-    color( 50, 149,  99),
-  };
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {

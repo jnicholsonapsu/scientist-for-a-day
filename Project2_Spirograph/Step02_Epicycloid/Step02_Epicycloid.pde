@@ -23,32 +23,51 @@
 
    =========================================================== */
 
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+
+// ---------- THE SHAPE -----------------------------------
+// ******************************
+// ***** CHANGE THESE LINES *****
+// ******************************
+float R = 120;   // radius of the circle that stays still
+float r = 40;    // radius of the circle that rolls around it
+
+int numberOfSides = 360;
+
+// ---------- THE LOOK ------------------------------------
+color paperColor = color(250, 247, 240);
+color lineColor = color(40, 90, 170);
+float lineThickness = 2;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float centerX = pageWidth / 2;
+float centerY = pageHeight / 2;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
 void setup() {
-  size(612, 792);
-  background(250, 247, 240);
+  noLoop();   // draw once, then wait
+}
 
+void draw() {
+  background(paperColor);
   noFill();
-  stroke(40, 90, 170);
-  strokeWeight(2);
-
-  float centerX = width / 2;
-  float centerY = height / 2;
-
-  // *******************************
-  // ***** CHANGE THESE LINES *****
-  // *******************************
-  float R = 120;   // radius of the circle that stays still
-  float r = 40;    // radius of the circle that rolls around it
-
-  int numberOfSides = 360;
+  stroke(lineColor);
+  strokeWeight(lineThickness);
 
   beginShape();
   for (int pointNumber = 0; pointNumber < numberOfSides; pointNumber++) {
     float t = TWO_PI * pointNumber / numberOfSides;
 
-    // *******************************
+    // ******************************
     // ***** CHANGE THESE LINES *****
-    // *******************************
+    // ******************************
     float x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t);
     float y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t);
 

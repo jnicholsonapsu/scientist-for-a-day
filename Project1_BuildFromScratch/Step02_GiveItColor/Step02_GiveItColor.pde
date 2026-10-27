@@ -11,9 +11,16 @@
 
    =========================================================== */
 
-void setup() {
+void settings() {
   size(612, 792);
+  pixelDensity(1);   // one pixel for every point on the page
+}
 
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   // **********************************************
   // ***** CHANGE background() AND ADD fill() *****
   // **********************************************

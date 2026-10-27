@@ -5,53 +5,54 @@
    So far you press PLAY to get a new picture. In this step
    you press the R key instead.
 
-   Three things to do:
-     - add noLoop(); under size()
-     - move everything else out of setup() into a new draw()
-       function, below setup()
+   One thing to do:
      - add the keyPressed() function at the bottom
 
    =========================================================== */
 
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+float pageMargin = 72;   // 1 inch when printed
+
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+float sizeRatio = 0.85;   // leaves room for the outline
+float fullness = 0.9;    // 1.0 fills every cell, 0.3 is sparse
+
+// ---------- THE LOOK ------------------------------------
+color[] palette = {
+  color( 50,  50, 149),
+  color(149,  50,  99),
+  color(149, 149,  50),
+  color( 50, 149,  99),
+};
+
+float strokeThickness = 10;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float drawingWidth = pageWidth - 2 * pageMargin;
+float drawingHeight = pageHeight - 2 * pageMargin;
+float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
+float diameter = cellSize * sizeRatio;
+
+float gridLeft = (pageWidth - numberOfColumns * cellSize) / 2;
+float gridTop = (pageHeight - numberOfRows * cellSize) / 2;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
 void setup() {
-  size(612, 792);
-  // *************************
-  // ***** ADD THIS LINE *****
-  // *************************
   noLoop();   // draw once, then wait
 }
 
-// ********************************************
-// ***** MOVE EVERYTHING ELSE INTO draw() *****
-// ********************************************
 void draw() {
   background(250, 247, 240);
-
-  float strokeThickness = 10;
   strokeWeight(strokeThickness);
-
-  float pageMargin = 72;   // 1 inch when printed
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-
-  float drawingWidth = width - 2 * pageMargin;
-  float drawingHeight = height - 2 * pageMargin;
-  float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
-  float sizeRatio = 0.85;   // leaves room for the outline
-  float diameter = cellSize * sizeRatio;
-
-  float gridLeft = (width - numberOfColumns * cellSize) / 2;
-  float gridTop = (height - numberOfRows * cellSize) / 2;
-
-  float fullness = 0.9;    // 1.0 fills every cell, 0.3 is sparse
-
-  color[] palette = {
-    color( 50,  50, 149),
-    color(149,  50,  99),
-    color(149, 149,  50),
-    color( 50, 149,  99),
-  };
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
@@ -85,16 +86,10 @@ void keyPressed() {
 /* ===========================================================
    Notes:
 
-   setup() AND draw()
+   WHY THE DRAWING IS IN draw()
 
-   setup() runs once, when you press PLAY. draw() is a second
-   function that Processing runs for you after setup().
-
-   Normally draw() runs over and over, many times a second.
-   noLoop() stops that, so draw() runs once and then waits.
-
-   The drawing code moved into draw() because draw() can be run
-   again. setup() cannot.
+   setup() runs only once. draw() can be run again, which is
+   what redraw() does.
 
    keyPressed()
 

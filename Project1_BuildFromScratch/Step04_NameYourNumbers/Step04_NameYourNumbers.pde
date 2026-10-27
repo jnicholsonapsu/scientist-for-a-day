@@ -15,24 +15,36 @@
    So we give the numbers names first, and use the names
    instead.
 
-   Replace your three ellipse() lines with the marked lines
-   below.
+   This step also rearranges the file. The numbers go at the
+   top, outside any function, and size() uses two of them.
+
+   Replace everything in your file with the code below.
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
 
+// ---------- THE CIRCLES ---------------------------------
+int diameter = 160;
+int centerX = 100;
+int centerY = 400;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   fill(230, 80, 70);
   noStroke();
-
-  // ************************************
-  // ***** REPLACE WITH THESE EIGHT *****
-  // ************************************
-  int diameter = 160;
-  int centerX = 100;
-  int centerY = 400;
 
   ellipse(centerX, centerY, diameter, diameter);
 
@@ -45,6 +57,21 @@ void setup() {
 
 /* ===========================================================
    Notes:
+
+   HOW THE FILE IS ARRANGED
+
+   The numbers you might want to change are at the top,
+   outside any function. THE PAGE says how big the page is,
+   and THE CIRCLES says where the circles go and how big they
+   are. THE DRAWING holds the functions that draw.
+
+   size(pageWidth, pageHeight)
+
+   size() now uses the variables pageWidth and pageHeight
+   instead of plain numbers. Processing only allows that
+   inside settings().
+
+   VARIABLES
 
    In this line, diameter is a "variable".
 
@@ -69,7 +96,8 @@ void setup() {
    measures from the middle of the circle, not from a corner.
 
    All three circles use the same diameter. Change that one
-   line at the top to 100 and all three circles change.
+   line at the top of the file to 100 and all three circles
+   change.
 
    That is the real reason to name a number. A number can
    be written in one place, but we can use a variable, which

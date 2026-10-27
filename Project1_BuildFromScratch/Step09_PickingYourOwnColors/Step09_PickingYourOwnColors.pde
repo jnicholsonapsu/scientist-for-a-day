@@ -16,28 +16,44 @@
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
 
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+float sizeRatio = 1.0;
+
+// ---------- THE LOOK ------------------------------------
+// ******************************************
+// ***** REPLACE YOUR PALETTE WITH THIS *****
+// ******************************************
+color[] palette = {
+  color(0, 0, 0),   // each color needs 3 numbers,
+  color(0, 0, 0),   // and each number must be a whole
+  color(0, 0, 0),   // number from 0 up to and
+                    // including 255
+};
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float cellWidth = pageWidth / numberOfColumns;
+float cellHeight = pageHeight / numberOfRows;
+float diameter = min(cellWidth, cellHeight) * sizeRatio;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   noStroke();
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-  float cellWidth = width / numberOfColumns;
-  float cellHeight = height / numberOfRows;
-  float sizeRatio = 1.0;
-  float diameter = min(cellWidth, cellHeight) * sizeRatio;
-
-  // ******************************************
-  // ***** REPLACE YOUR PALETTE WITH THIS *****
-  // ******************************************
-  color[] palette = {
-    color(0, 0, 0),   // each color needs 3 numbers,
-    color(0, 0, 0),   // and each number must be a whole
-    color(0, 0, 0),   // number from 0 up to and
-                      // including 255
-  };
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {

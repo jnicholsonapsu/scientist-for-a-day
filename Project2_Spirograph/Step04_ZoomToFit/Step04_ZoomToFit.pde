@@ -4,7 +4,8 @@
 
    This step works out how big the shape is, then zooms it in
    or out so it fits exactly inside a 1 inch margin. R and r
-   can now be small whole numbers, like 12 and 5.
+   can now be small whole numbers, like 12 and 5. The picture
+   is also saved as a PDF file, ready to print.
 
    Change and add the lines marked below, then press PLAY.
 
@@ -23,55 +24,88 @@
 
    =========================================================== */
 
+// *************************
+// ***** ADD THIS LINE *****
+// *************************
+import processing.pdf.*;
+
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+// *************************
+// ***** ADD THIS LINE *****
+// *************************
+float pageMargin = 72;   // 1 inch when printed
+
+// ---------- THE SHAPE -----------------------------------
+// ******************************
+// ***** CHANGE THESE LINES *****
+// ******************************
+float R = 12;   // radius of the circle that stays still
+float r = 5;    // radius of the circle that rolls around it
+
+int numberOfSides = 360;
+
+// ---------- THE LOOK ------------------------------------
+color paperColor = color(250, 247, 240);
+color lineColor = color(40, 90, 170);
+float lineThickness = 2;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float centerX = pageWidth / 2;
+float centerY = pageHeight / 2;
+
+// reduce R / r to its smallest fraction
+int divisor = greatestCommonDivisor(int(R), int(r));
+int denominator = int(r) / divisor;
+
+// ***************************
+// ***** ADD THESE LINES *****
+// ***************************
+float shapeRadius = R + 2 * r;   // the farthest the shape reaches
+                                 // from its center
+float availableRadius = min(pageWidth, pageHeight) / 2 - pageMargin;
+float zoom = availableRadius / shapeRadius;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // keeps the PDF the same size as the window
+}
+
 void setup() {
-  size(612, 792);
-  background(250, 247, 240);
+  noLoop();   // draw once, then wait
+}
 
-  noFill();
-  stroke(40, 90, 170);
-  strokeWeight(2);
-
-  float centerX = width / 2;
-  float centerY = height / 2;
-
-  // ***************************
+void draw() {
+  // *************************
   // ***** ADD THIS LINE *****
-  // ***************************
-  float pageMargin = 72;   // 1 inch when printed
+  // *************************
+  beginRecord(PDF, "picture.pdf");
 
-  // *******************************
-  // ***** CHANGE THESE LINES *****
-  // *******************************
-  float R = 12;   // radius of the circle that stays still
-  float r = 5;    // radius of the circle that rolls around it
-
-  int numberOfSides = 360;
-
-  // reduce R / r to its smallest fraction
-  int divisor = greatestCommonDivisor(int(R), int(r));
-  int denominator = int(r) / divisor;
-
-  // ****************************
-  // ***** ADD THESE LINES *****
-  // ****************************
-  float shapeRadius = R + 2 * r;   // the farthest the shape reaches
-                                   // from its center
-  float availableRadius = min(width, height) / 2 - pageMargin;
-  float zoom = availableRadius / shapeRadius;
+  background(paperColor);
+  noFill();
+  stroke(lineColor);
+  strokeWeight(lineThickness);
 
   beginShape();
   for (int pointNumber = 0; pointNumber < numberOfSides * denominator; pointNumber++) {
     float t = TWO_PI * pointNumber / numberOfSides;
 
-    // *******************************
+    // ******************************
     // ***** CHANGE THESE LINES *****
-    // *******************************
+    // ******************************
     float x = centerX + zoom * ((R + r) * cos(t) - r * cos((R + r) / r * t));
     float y = centerY + zoom * ((R + r) * sin(t) - r * sin((R + r) / r * t));
 
     vertex(x, y);
   }
   endShape(CLOSE);
+
+  // *************************
+  // ***** ADD THIS LINE *****
+  // *************************
+  endRecord();
 }
 
 // The biggest whole number that divides both a and b
@@ -99,9 +133,9 @@ int greatestCommonDivisor(int a, int b) {
 
    HOW MUCH ROOM THERE IS
 
-       float availableRadius = min(width, height) / 2 - pageMargin;
+       float availableRadius = min(pageWidth, pageHeight) / 2 - pageMargin;
 
-   min() picks the smaller of width and height, so the shape
+   min() picks the smaller of pageWidth and pageHeight, so the shape
    fits both ways. Here that is 612 / 2 - 72 = 234.
 
    THE ZOOM
@@ -116,6 +150,30 @@ int greatestCommonDivisor(int a, int b) {
    Because of the zoom, only the fraction R / r changes the
    shape. R = 12, r = 5 and R = 120, r = 50 draw the same
    picture.
+
+   SAVING A PDF
+
+       import processing.pdf.*;
+
+   Saving a PDF is not built into Processing. This line loads
+   the extra part of Processing that can do it.
+
+       beginRecord(PDF, "picture.pdf");
+
+   Everything drawn between beginRecord() and endRecord() goes
+   to the screen and into the PDF file. endRecord() finishes
+   the file.
+
+       pixelDensity(1);
+
+   Some screens, such as most Macs, pack two pixels into every
+   point of the window. Without this line, the PDF gets drawn
+   twice as big as the window, and only the top-left quarter
+   fits on the page.
+
+   picture.pdf is saved in your sketch folder, and each run
+   replaces the one before. To open it, use
+   Sketch > Show Sketch Folder.
 
    TRY THESE (change a line, press PLAY, see what's different):
 

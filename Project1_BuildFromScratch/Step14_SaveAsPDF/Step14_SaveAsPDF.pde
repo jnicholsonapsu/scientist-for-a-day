@@ -5,9 +5,8 @@
    In this step the picture on screen is also saved as a PDF
    file, ready to print.
 
-   Four things to do:
+   Three things to do:
      - add the import line at the very top of the file
-     - add pixelDensity(1); under size()
      - add the beginRecord() line at the top of draw()
      - add the endRecord() line at the bottom of draw()
 
@@ -18,12 +17,43 @@
 // *************************
 import processing.pdf.*;
 
-void setup() {
-  size(612, 792);
-  // *************************
-  // ***** ADD THIS LINE *****
-  // *************************
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+float pageMargin = 72;   // 1 inch when printed
+
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+float sizeRatio = 0.85;   // leaves room for the outline
+float fullness = 0.9;    // 1.0 fills every cell, 0.3 is sparse
+
+// ---------- THE LOOK ------------------------------------
+color[] palette = {
+  color( 50,  50, 149),
+  color(149,  50,  99),
+  color(149, 149,  50),
+  color( 50, 149,  99),
+};
+
+float strokeThickness = 10;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float drawingWidth = pageWidth - 2 * pageMargin;
+float drawingHeight = pageHeight - 2 * pageMargin;
+float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
+float diameter = cellSize * sizeRatio;
+
+float gridLeft = (pageWidth - numberOfColumns * cellSize) / 2;
+float gridTop = (pageHeight - numberOfRows * cellSize) / 2;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
   pixelDensity(1);   // keeps the PDF the same size as the window
+}
+
+void setup() {
   noLoop();   // draw once, then wait
 }
 
@@ -34,32 +64,7 @@ void draw() {
   beginRecord(PDF, "picture.pdf");
 
   background(250, 247, 240);
-
-  float strokeThickness = 10;
   strokeWeight(strokeThickness);
-
-  float pageMargin = 72;   // 1 inch when printed
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-
-  float drawingWidth = width - 2 * pageMargin;
-  float drawingHeight = height - 2 * pageMargin;
-  float cellSize = min(drawingWidth / numberOfColumns, drawingHeight / numberOfRows);
-  float sizeRatio = 0.85;   // leaves room for the outline
-  float diameter = cellSize * sizeRatio;
-
-  float gridLeft = (width - numberOfColumns * cellSize) / 2;
-  float gridTop = (height - numberOfRows * cellSize) / 2;
-
-  float fullness = 0.9;    // 1.0 fills every cell, 0.3 is sparse
-
-  color[] palette = {
-    color( 50,  50, 149),
-    color(149,  50,  99),
-    color(149, 149,  50),
-    color( 50, 149,  99),
-  };
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {

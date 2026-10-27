@@ -25,36 +25,55 @@
 
    =========================================================== */
 
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
+
+// ---------- THE SHAPE -----------------------------------
+float R = 120;   // radius of the circle that stays still
+// ****************************
+// ***** CHANGE THIS LINE *****
+// ****************************
+float r = 50;    // radius of the circle that rolls around it
+
+int numberOfSides = 360;
+
+// ---------- THE LOOK ------------------------------------
+color paperColor = color(250, 247, 240);
+color lineColor = color(40, 90, 170);
+float lineThickness = 2;
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float centerX = pageWidth / 2;
+float centerY = pageHeight / 2;
+
+// ***************************
+// ***** ADD THESE LINES *****
+// ***************************
+// reduce R / r to its smallest fraction
+int divisor = greatestCommonDivisor(int(R), int(r));
+int denominator = int(r) / divisor;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
 void setup() {
-  size(612, 792);
-  background(250, 247, 240);
+  noLoop();   // draw once, then wait
+}
 
+void draw() {
+  background(paperColor);
   noFill();
-  stroke(40, 90, 170);
-  strokeWeight(2);
-
-  float centerX = width / 2;
-  float centerY = height / 2;
-
-  float R = 120;   // radius of the circle that stays still
-  // *****************************
-  // ***** CHANGE THIS LINE *****
-  // *****************************
-  float r = 50;    // radius of the circle that rolls around it
-
-  int numberOfSides = 360;
-
-  // ****************************
-  // ***** ADD THESE LINES *****
-  // ****************************
-  // reduce R / r to its smallest fraction
-  int divisor = greatestCommonDivisor(int(R), int(r));
-  int denominator = int(r) / divisor;
+  stroke(lineColor);
+  strokeWeight(lineThickness);
 
   beginShape();
-  // *****************************
+  // ****************************
   // ***** CHANGE THIS LINE *****
-  // *****************************
+  // ****************************
   for (int pointNumber = 0; pointNumber < numberOfSides * denominator; pointNumber++) {
     float t = TWO_PI * pointNumber / numberOfSides;
 
@@ -66,9 +85,9 @@ void setup() {
   endShape(CLOSE);
 }
 
-// ****************************
+// ***************************
 // ***** ADD THESE LINES *****
-// ****************************
+// ***************************
 // The biggest whole number that divides both a and b
 int greatestCommonDivisor(int a, int b) {
   while (b != 0) {

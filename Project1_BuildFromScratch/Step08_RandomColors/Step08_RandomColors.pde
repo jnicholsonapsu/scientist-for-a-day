@@ -11,38 +11,57 @@
    sit on plain paper.
 
    Four things to do:
-     - delete rectMode(CENTER);
+     - change sizeRatio to 1.0
      - replace the three color lines with the palette
+     - delete rectMode(CENTER);
      - delete the if / else, the rect() and the fill() that
-       followed it
-     - change sizeRatio to 1.0, and add the two new lines
-       inside the inner loop
+       followed it, and add the two new lines inside the
+       inner loop
 
    =========================================================== */
 
-void setup() {
-  size(612, 792);
+// ---------- THE PAGE ------------------------------------
+int pageWidth = 612;     // 8.5 inches when printed
+int pageHeight = 792;    // 11 inches when printed
 
+// ---------- THE GRID ------------------------------------
+int numberOfColumns = 6;
+int numberOfRows = 8;
+// ****************************
+// ***** CHANGE THIS LINE *****
+// ****************************
+float sizeRatio = 1.0;
+
+// ---------- THE LOOK ------------------------------------
+// **********************************************
+// ***** REPLACE THE THREE COLORS WITH THIS *****
+// **********************************************
+color[] palette = {
+  color(230,  57,  70),   // red
+  color(244, 162,  97),   // orange
+  color( 42, 157, 143),   // teal
+  color( 38,  70,  83),   // dark blue
+  color(233, 196, 106),   // gold
+};
+
+// ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
+float cellWidth = pageWidth / numberOfColumns;
+float cellHeight = pageHeight / numberOfRows;
+float diameter = min(cellWidth, cellHeight) * sizeRatio;
+
+// ---------- THE DRAWING ---------------------------------
+void settings() {
+  size(pageWidth, pageHeight);
+  pixelDensity(1);   // one pixel for every point on the page
+}
+
+void setup() {
+  noLoop();   // draw once, then wait
+}
+
+void draw() {
   background(250, 247, 240);
   noStroke();
-
-  int numberOfColumns = 6;
-  int numberOfRows = 8;
-  float cellWidth = width / numberOfColumns;
-  float cellHeight = height / numberOfRows;
-  float sizeRatio = 1.0;
-  float diameter = min(cellWidth, cellHeight) * sizeRatio;
-
-  // **********************************************
-  // ***** REPLACE THE THREE COLORS WITH THIS *****
-  // **********************************************
-  color[] palette = {
-    color(230,  57,  70),   // red
-    color(244, 162,  97),   // orange
-    color( 42, 157, 143),   // teal
-    color( 38,  70,  83),   // dark blue
-    color(233, 196, 106),   // gold
-  };
 
   for (int column = 0; column < numberOfColumns; column++) {
     for (int row = 0; row < numberOfRows; row++) {
