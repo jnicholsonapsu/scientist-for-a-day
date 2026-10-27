@@ -1,0 +1,130 @@
+/* ===========================================================
+   STEP 3 — FINISHING THE SHAPE
+   ===========================================================
+
+   In Step 2, r = 50 left a straight line across the shape,
+   because one trip around was not enough to finish it.
+
+   This step works out how many trips around are needed, and
+   loops that many times.
+
+   Change and add the lines marked below, then press PLAY.
+
+   You should get a blue shape with twelve points that
+   overlap, and no straight line.
+
+   THE EQUATIONS
+
+       x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t)
+       y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t)
+
+         R = radius of the circle that stays still
+         r = radius of the circle that rolls
+         t = the angle the rolling circle has traveled
+             around the still one
+
+   =========================================================== */
+
+void setup() {
+  size(612, 792);
+  background(250, 247, 240);
+
+  noFill();
+  stroke(40, 90, 170);
+  strokeWeight(2);
+
+  float centerX = width / 2;
+  float centerY = height / 2;
+
+  float R = 120;   // radius of the circle that stays still
+  // *****************************
+  // ***** CHANGE THIS LINE *****
+  // *****************************
+  float r = 50;    // radius of the circle that rolls around it
+
+  int numberOfSides = 360;
+
+  // ****************************
+  // ***** ADD THESE LINES *****
+  // ****************************
+  // reduce R / r to its smallest fraction
+  int divisor = greatestCommonDivisor(int(R), int(r));
+  int denominator = int(r) / divisor;
+
+  beginShape();
+  // *****************************
+  // ***** CHANGE THIS LINE *****
+  // *****************************
+  for (int pointNumber = 0; pointNumber < numberOfSides * denominator; pointNumber++) {
+    float t = TWO_PI * pointNumber / numberOfSides;
+
+    float x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t);
+    float y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t);
+
+    vertex(x, y);
+  }
+  endShape(CLOSE);
+}
+
+// ****************************
+// ***** ADD THESE LINES *****
+// ****************************
+// The biggest whole number that divides both a and b
+int greatestCommonDivisor(int a, int b) {
+  while (b != 0) {
+    int remainder = a % b;
+    a = b;
+    b = remainder;
+  }
+  return a;
+}
+
+/* ===========================================================
+   Notes:
+
+   HOW MANY TRIPS AROUND
+
+   Reduce R / r to its smallest fraction:
+
+       120 / 50  =  12 / 5
+
+   The numerator, 12, is the number of points on the shape.
+   The denominator, 5, is how many trips around it takes to
+   finish the shape. So the loop now runs
+
+       numberOfSides * denominator
+
+   times, which is 360 * 5 = 1800.
+
+   Keep R and r whole numbers, or the fraction will be wrong.
+
+   greatestCommonDivisor()
+
+   This finds the biggest whole number that divides both R
+   and r. Dividing both by it gives the smallest fraction.
+   For 120 and 50 it is 10.
+
+   It uses Euclid's method, which is over 2,000 years old:
+   replace the two numbers with the smaller one and the
+   remainder, until the remainder is 0.
+
+       a = 120, b = 50    remainder 20
+       a =  50, b = 20    remainder 10
+       a =  20, b = 10    remainder  0
+       a =  10, b =  0    so the answer is 10
+
+   int(R)
+
+   R and r are floats, but % only makes sense for whole
+   numbers, so int() turns them into ints first.
+
+   TRY THESE (change a line, press PLAY, see what's different):
+
+     float r = 45;    // 120 / 45 = 8 / 3
+
+     float r = 35;    // 120 / 35 = 24 / 7
+
+     float r = 40;    // 120 / 40 = 3 / 1, so one trip
+                      // around is enough, as in Step 2
+
+   =========================================================== */
