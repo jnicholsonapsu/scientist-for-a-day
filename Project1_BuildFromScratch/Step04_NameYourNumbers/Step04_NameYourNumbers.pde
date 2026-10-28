@@ -33,7 +33,7 @@ int centerY = 400;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // one pixel for every point on the page
 }
 
@@ -65,7 +65,7 @@ void draw() {
    and THE CIRCLES says where the circles go and how big they
    are. THE DRAWING holds the functions that draw.
 
-   size(pageWidth, pageHeight)
+   size(pageWidth, pageHeight, P2D)
 
    size() now uses the variables pageWidth and pageHeight
    instead of plain numbers. Processing only allows that

@@ -14,7 +14,7 @@
    =========================================================== */
 
 void settings() {
-  size(612, 792);
+  size(612, 792, P2D);
   pixelDensity(1);   // one pixel for every point on the page
 }
 
@@ -44,9 +44,11 @@ void draw() {
    noLoop() in setup() stops that, so draw() runs once and
    then waits.
 
-   size(612, 792);
+   size(612, 792, P2D);
        Make a window 612 wide and 792 tall, the shape of a
        sheet of letter paper.
+       P2D tells Processing to draw with the computer's
+       graphics card, which gives smoother curves.
 
    pixelDensity(1);
        Some screens, such as most Macs, pack two pixels into

@@ -9,17 +9,19 @@
 
    Change and add the lines marked below, then press PLAY.
 
-   You should get the same twelve-point shape as Step 4,
+   You should get the same twelve-loop shape as Step 4,
    blue on the left, red on the right, and purple where they
    meet in the middle.
 
    THE EQUATIONS
 
-       x = centerX + zoom * ((R + r) * cos(t) - r * cos((R + r) / r * t))
-       y = centerY + zoom * ((R + r) * sin(t) - r * sin((R + r) / r * t))
+       x = centerX + zoom * ((R + r) * cos(t) - d * cos((R + r) * t / r))
+       y = centerY + zoom * ((R + r) * sin(t) - d * sin((R + r) * t / r))
 
          R = radius of the circle that stays still
          r = radius of the circle that rolls
+         d = how far the pen is from the center of the
+             rolling circle
          t = the angle the rolling circle has traveled
              around the still one
 
@@ -33,8 +35,10 @@ int pageHeight = 792;    // 11 inches when printed
 float pageMargin = 72;   // 1 inch when printed
 
 // ---------- THE SHAPE -----------------------------------
-float R = 12;   // radius of the circle that stays still
-float r = 5;    // radius of the circle that rolls around it
+int R = 12;   // radius of the circle that stays still
+int r = 5;    // radius of the circle that rolls around it
+float d = 6;    // the pen's distance from the center of
+                // the rolling circle
 
 int numberOfSides = 360;
 
@@ -56,17 +60,17 @@ float centerX = pageWidth / 2;
 float centerY = pageHeight / 2;
 
 // reduce R / r to its smallest fraction
-int divisor = greatestCommonDivisor(int(R), int(r));
-int denominator = int(r) / divisor;
+int divisor = greatestCommonDivisor(R, r);
+int denominator = r / divisor;
 
-float shapeRadius = R + 2 * r;   // the farthest the shape reaches
+float shapeRadius = R + r + d;   // the farthest the shape reaches
                                  // from its center
 float availableRadius = min(pageWidth, pageHeight) / 2 - pageMargin;
 float zoom = availableRadius / shapeRadius;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // keeps the PDF the same size as the window
 }
 
@@ -93,8 +97,8 @@ void draw() {
   for (int pointNumber = 0; pointNumber <= numberOfSides * denominator; pointNumber++) {
     float t = TWO_PI * pointNumber / numberOfSides;
 
-    float x = centerX + zoom * ((R + r) * cos(t) - r * cos((R + r) / r * t));
-    float y = centerY + zoom * ((R + r) * sin(t) - r * sin((R + r) / r * t));
+    float x = centerX + zoom * ((R + r) * cos(t) - d * cos((R + r) * t / r));
+    float y = centerY + zoom * ((R + r) * sin(t) - d * sin((R + r) * t / r));
 
     // ******************************
     // ***** CHANGE THESE LINES *****

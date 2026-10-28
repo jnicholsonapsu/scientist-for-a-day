@@ -10,16 +10,18 @@
 
    Change and add the lines marked below, then press PLAY.
 
-   You should get a blue shape with twelve points that
+   You should get a blue shape with twelve loops that
    overlap, and no straight line.
 
    THE EQUATIONS
 
-       x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t)
-       y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t)
+       x = centerX + (R + r) * cos(t) - d * cos((R + r) * t / r)
+       y = centerY + (R + r) * sin(t) - d * sin((R + r) * t / r)
 
          R = radius of the circle that stays still
          r = radius of the circle that rolls
+         d = how far the pen is from the center of the
+             rolling circle
          t = the angle the rolling circle has traveled
              around the still one
 
@@ -30,11 +32,13 @@ int pageWidth = 612;     // 8.5 inches when printed
 int pageHeight = 792;    // 11 inches when printed
 
 // ---------- THE SHAPE -----------------------------------
-float R = 120;   // radius of the circle that stays still
+int R = 120;   // radius of the circle that stays still
 // ****************************
 // ***** CHANGE THIS LINE *****
 // ****************************
-float r = 50;    // radius of the circle that rolls around it
+int r = 50;    // radius of the circle that rolls around it
+float d = 60;    // the pen's distance from the center of
+                 // the rolling circle
 
 int numberOfSides = 360;
 
@@ -51,12 +55,12 @@ float centerY = pageHeight / 2;
 // ***** ADD THESE LINES *****
 // ***************************
 // reduce R / r to its smallest fraction
-int divisor = greatestCommonDivisor(int(R), int(r));
-int denominator = int(r) / divisor;
+int divisor = greatestCommonDivisor(R, r);
+int denominator = r / divisor;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // one pixel for every point on the page
 }
 
@@ -77,8 +81,8 @@ void draw() {
   for (int pointNumber = 0; pointNumber < numberOfSides * denominator; pointNumber++) {
     float t = TWO_PI * pointNumber / numberOfSides;
 
-    float x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t);
-    float y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t);
+    float x = centerX + (R + r) * cos(t) - d * cos((R + r) * t / r);
+    float y = centerY + (R + r) * sin(t) - d * sin((R + r) * t / r);
 
     vertex(x, y);
   }
@@ -107,15 +111,13 @@ int greatestCommonDivisor(int a, int b) {
 
        120 / 50  =  12 / 5
 
-   The numerator, 12, is the number of points on the shape.
+   The numerator, 12, is the number of loops on the shape.
    The denominator, 5, is how many trips around it takes to
    finish the shape. So the loop now runs
 
        numberOfSides * denominator
 
    times, which is 360 * 5 = 1800.
-
-   Keep R and r whole numbers, or the fraction will be wrong.
 
    greatestCommonDivisor()
 
@@ -132,18 +134,13 @@ int greatestCommonDivisor(int a, int b) {
        a =  20, b = 10    remainder  0
        a =  10, b =  0    so the answer is 10
 
-   int(R)
-
-   R and r are floats, but % only makes sense for whole
-   numbers, so int() turns them into ints first.
-
    TRY THESE (change a line, press PLAY, see what's different):
 
-     float r = 45;    // 120 / 45 = 8 / 3
+     int r = 45;    // 120 / 45 = 8 / 3
 
-     float r = 35;    // 120 / 35 = 24 / 7
+     int r = 35;    // 120 / 35 = 24 / 7
 
-     float r = 40;    // 120 / 40 = 3 / 1, so one trip
+     int r = 40;    // 120 / 40 = 3 / 1, so one trip
                       // around is enough, as in Step 2
 
    =========================================================== */

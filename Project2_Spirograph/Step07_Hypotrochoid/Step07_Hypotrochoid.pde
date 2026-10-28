@@ -16,8 +16,8 @@
 
    THE EQUATIONS
 
-       x = centerX + zoom * ((R - r) * cos(t) + d * cos((R - r) / r * t))
-       y = centerY + zoom * ((R - r) * sin(t) - d * sin((R - r) / r * t))
+       x = centerX + zoom * ((R - r) * cos(t) + d * cos((R - r) * t / r))
+       y = centerY + zoom * ((R - r) * sin(t) - d * sin((R - r) * t / r))
 
          R = radius of the circle that stays still
          r = radius of the circle that rolls inside it
@@ -39,11 +39,8 @@ float pageMargin = 72;   // 1 inch when printed
 // ******************************
 // ***** CHANGE THESE LINES *****
 // ******************************
-float R = 8;    // radius of the circle that stays still
-float r = 3;    // radius of the circle that rolls inside it
-// *************************
-// ***** ADD THIS LINE *****
-// *************************
+int R = 8;    // radius of the circle that stays still
+int r = 3;    // radius of the circle that rolls inside it
 float d = 4;    // the pen's distance from the center of
                 // the rolling circle
 
@@ -68,8 +65,8 @@ float centerX = pageWidth / 2;
 float centerY = pageHeight / 2;
 
 // reduce R / r to its smallest fraction
-int divisor = greatestCommonDivisor(int(R), int(r));
-int denominator = int(r) / divisor;
+int divisor = greatestCommonDivisor(R, r);
+int denominator = r / divisor;
 
 // ****************************
 // ***** CHANGE THIS LINE *****
@@ -81,7 +78,7 @@ float zoom = availableRadius / shapeRadius;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // keeps the PDF the same size as the window
 }
 
@@ -104,8 +101,8 @@ void draw() {
     // ******************************
     // ***** CHANGE THESE LINES *****
     // ******************************
-    float x = centerX + zoom * ((R - r) * cos(t) + d * cos((R - r) / r * t));
-    float y = centerY + zoom * ((R - r) * sin(t) - d * sin((R - r) / r * t));
+    float x = centerX + zoom * ((R - r) * cos(t) + d * cos((R - r) * t / r));
+    float y = centerY + zoom * ((R - r) * sin(t) - d * sin((R - r) * t / r));
 
     if (pointNumber > 0) {
       float distanceFromCenter = previousX - centerX;
@@ -142,8 +139,7 @@ int greatestCommonDivisor(int a, int b) {
    WHAT CHANGED FROM STEP 6
 
    R + r became R - r, because the circle now rolls inside.
-   The pen part now uses d instead of r, because the pen is
-   d from the center of the rolling circle, not on its edge.
+   In x, - d * cos(...) became + d * cos(...).
 
    HOW BIG THE SHAPE IS
 
@@ -179,10 +175,10 @@ int greatestCommonDivisor(int a, int b) {
      float d = 0;     // the pen is at the center, so all
                       // you get is a circle
 
-     float r = 5;     // 8 / 5
+     int r = 5;     // 8 / 5
 
-     float r = 7;     // 8 / 7
+     int r = 7;     // 8 / 7
 
-     float r = 1;     // 8 / 1
+     int r = 1;     // 8 / 1
 
    =========================================================== */

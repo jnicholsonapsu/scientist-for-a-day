@@ -49,7 +49,7 @@ float gridTop = (pageHeight - numberOfRows * cellSize) / 2;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // keeps the PDF the same size as the window
 }
 

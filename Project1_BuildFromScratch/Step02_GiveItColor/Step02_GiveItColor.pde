@@ -12,7 +12,7 @@
    =========================================================== */
 
 void settings() {
-  size(612, 792);
+  size(612, 792, P2D);
   pixelDensity(1);   // one pixel for every point on the page
 }
 

@@ -1,23 +1,24 @@
 /* ===========================================================
-   STEP 2 — EPICYCLOID
+   STEP 2 — EPITROCHOID
    ===========================================================
 
-   An epicycloid is the path of a point on the edge of a
-   circle that rolls around the OUTSIDE of another circle
-   that stays still.
+   An epitrochoid is the path of a pen in a circle that rolls
+   around the OUTSIDE of another circle that stays still. The
+   pen does not have to be on the edge of the rolling circle.
 
    Change the lines marked below, then press PLAY.
 
-   You should get a blue shape with three points, like a
-   three-leaf clover.
+   You should get a blue shape with three loops.
 
    THE EQUATIONS
 
-       x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t)
-       y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t)
+       x = centerX + (R + r) * cos(t) - d * cos((R + r) * t / r)
+       y = centerY + (R + r) * sin(t) - d * sin((R + r) * t / r)
 
          R = radius of the circle that stays still
          r = radius of the circle that rolls
+         d = how far the pen is from the center of the
+             rolling circle
          t = the angle the rolling circle has traveled
              around the still one
 
@@ -31,8 +32,10 @@ int pageHeight = 792;    // 11 inches when printed
 // ******************************
 // ***** CHANGE THESE LINES *****
 // ******************************
-float R = 120;   // radius of the circle that stays still
-float r = 40;    // radius of the circle that rolls around it
+int R = 120;   // radius of the circle that stays still
+int r = 40;    // radius of the circle that rolls around it
+float d = 60;    // the pen's distance from the center of
+                 // the rolling circle
 
 int numberOfSides = 360;
 
@@ -47,7 +50,7 @@ float centerY = pageHeight / 2;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // one pixel for every point on the page
 }
 
@@ -68,8 +71,8 @@ void draw() {
     // ******************************
     // ***** CHANGE THESE LINES *****
     // ******************************
-    float x = centerX + (R + r) * cos(t) - r * cos((R + r) / r * t);
-    float y = centerY + (R + r) * sin(t) - r * sin((R + r) / r * t);
+    float x = centerX + (R + r) * cos(t) - d * cos((R + r) * t / r);
+    float y = centerY + (R + r) * sin(t) - d * sin((R + r) * t / r);
 
     vertex(x, y);
   }
@@ -89,11 +92,11 @@ void draw() {
    a circle of radius R + r, the same way the point in Step 1
    went around its circle.
 
-       - r * cos((R + r) / r * t)
+       - d * cos((R + r) * t / r)
 
-   This is the pen on the edge of the rolling circle. It spins
-   around that center at the same time. (R + r) / r is how
-   many times it spins for each trip around. Here that is
+   This is the pen, d from the center of the rolling circle.
+   It spins around that center at the same time, (R + r) / r
+   times for each trip around. Here that is
    (120 + 40) / 40 = 4.
 
    R AND r
@@ -101,19 +104,38 @@ void draw() {
    Processing treats capital R and small r as two different
    variables.
 
-   THE NUMBER OF POINTS
+   WHY (R + r) * t / r AND NOT (R + r) / r * t
 
-   R / r is the number of points on the shape. Here it is
+   R and r are ints, whole numbers. When Processing divides
+   one int by another, it throws away the part after the
+   decimal point, so 120 / 50 gives 2, not 2.4.
+
+   t is a float, so (R + r) * t is a float. Dividing that by
+   r keeps the decimals. Doing the multiplication first gives
+   the right answer.
+
+   THE NUMBER OF LOOPS
+
+   R / r is the number of loops on the shape. Here it is
    120 / 40 = 3.
 
    TRY THESE (change a line, press PLAY, see what's different):
 
-     float r = 24;    // 120 / 24 = 5 points
+     int r = 24;    // 120 / 24 = 5 loops
 
-     float r = 60;    // 120 / 60 = 2 points. This
-                      // shape is called a nephroid
+     int r = 60;    // 120 / 60 = 2 loops
 
-     float r = 50;    // 120 / 50 is not a whole
+     float d = 40;    // the same as r, so the pen is on
+                      // the edge of the rolling circle.
+                      // The loops become sharp points.
+                      // This shape is called an
+                      // epicycloid
+
+     float d = 20;    // the pen is inside the rolling
+                      // circle, so the loops become
+                      // gentle bumps
+
+     int r = 50;    // 120 / 50 is not a whole
                       // number, so one trip around
                       // doesn't finish the shape.
                       // endShape(CLOSE) joins the ends
@@ -122,8 +144,8 @@ void draw() {
      // -------------------------------------------------
      // replace R and r with these
 
-     float R = 80;
-     float r = 80;    // 1 point. This shape is
-                      // called a cardioid
+     int R = 80;
+     int r = 80;    // 1 loop. With d = 80 too, this
+                      // shape is called a cardioid
 
    =========================================================== */

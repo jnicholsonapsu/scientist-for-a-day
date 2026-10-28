@@ -3,22 +3,24 @@
    ===========================================================
 
    This step works out how big the shape is, then zooms it in
-   or out so it fits exactly inside a 1 inch margin. R and r
-   can now be small whole numbers, like 12 and 5. The picture
+   or out so it fits exactly inside a 1 inch margin. R, r
+   and d can now be small whole numbers, like 12, 5 and 6. The picture
    is also saved as a PDF file, ready to print.
 
    Change and add the lines marked below, then press PLAY.
 
-   You should get the same twelve-point shape as Step 3,
+   You should get the same twelve-loop shape as Step 3,
    touching the margin on the left and right.
 
    THE EQUATIONS
 
-       x = centerX + zoom * ((R + r) * cos(t) - r * cos((R + r) / r * t))
-       y = centerY + zoom * ((R + r) * sin(t) - r * sin((R + r) / r * t))
+       x = centerX + zoom * ((R + r) * cos(t) - d * cos((R + r) * t / r))
+       y = centerY + zoom * ((R + r) * sin(t) - d * sin((R + r) * t / r))
 
          R = radius of the circle that stays still
          r = radius of the circle that rolls
+         d = how far the pen is from the center of the
+             rolling circle
          t = the angle the rolling circle has traveled
              around the still one
 
@@ -41,8 +43,10 @@ float pageMargin = 72;   // 1 inch when printed
 // ******************************
 // ***** CHANGE THESE LINES *****
 // ******************************
-float R = 12;   // radius of the circle that stays still
-float r = 5;    // radius of the circle that rolls around it
+int R = 12;   // radius of the circle that stays still
+int r = 5;    // radius of the circle that rolls around it
+float d = 6;    // the pen's distance from the center of
+                // the rolling circle
 
 int numberOfSides = 360;
 
@@ -56,20 +60,20 @@ float centerX = pageWidth / 2;
 float centerY = pageHeight / 2;
 
 // reduce R / r to its smallest fraction
-int divisor = greatestCommonDivisor(int(R), int(r));
-int denominator = int(r) / divisor;
+int divisor = greatestCommonDivisor(R, r);
+int denominator = r / divisor;
 
 // ***************************
 // ***** ADD THESE LINES *****
 // ***************************
-float shapeRadius = R + 2 * r;   // the farthest the shape reaches
+float shapeRadius = R + r + d;   // the farthest the shape reaches
                                  // from its center
 float availableRadius = min(pageWidth, pageHeight) / 2 - pageMargin;
 float zoom = availableRadius / shapeRadius;
 
 // ---------- THE DRAWING ---------------------------------
 void settings() {
-  size(pageWidth, pageHeight);
+  size(pageWidth, pageHeight, P2D);
   pixelDensity(1);   // keeps the PDF the same size as the window
 }
 
@@ -95,8 +99,8 @@ void draw() {
     // ******************************
     // ***** CHANGE THESE LINES *****
     // ******************************
-    float x = centerX + zoom * ((R + r) * cos(t) - r * cos((R + r) / r * t));
-    float y = centerY + zoom * ((R + r) * sin(t) - r * sin((R + r) / r * t));
+    float x = centerX + zoom * ((R + r) * cos(t) - d * cos((R + r) * t / r));
+    float y = centerY + zoom * ((R + r) * sin(t) - d * sin((R + r) * t / r));
 
     vertex(x, y);
   }
@@ -124,12 +128,13 @@ int greatestCommonDivisor(int a, int b) {
    HOW BIG THE SHAPE IS
 
    The center of the rolling circle is always R + r from the
-   center of the page. The pen is on its edge, so it can be up
-   to r farther out. The farthest the shape reaches is
+   center of the page. The pen is d from that center, so it
+   can be up to d farther out. The farthest the shape reaches
+   is
 
-       R + 2 * r
+       R + r + d
 
-   which is 12 + 2 * 5 = 22 here.
+   which is 12 + 5 + 6 = 23 here.
 
    HOW MUCH ROOM THERE IS
 
@@ -142,14 +147,14 @@ int greatestCommonDivisor(int a, int b) {
 
        float zoom = availableRadius / shapeRadius;
 
-   Here that is 234 / 22, about 10.6. Every point of the shape
-   is multiplied by zoom, so a shape 22 across from the center
-   becomes 234. If the shape is bigger than the room, zoom is
+   Here that is 234 / 23, about 10.2. Every point of the shape
+   is multiplied by zoom, so a shape that reaches 23 from the
+   center now reaches 234. If the shape is bigger than the room, zoom is
    less than 1 and the shape shrinks.
 
-   Because of the zoom, only the fraction R / r changes the
-   shape. R = 12, r = 5 and R = 120, r = 50 draw the same
-   picture.
+   Because of the zoom, only the proportions of R, r and d
+   change the shape. R = 12, r = 5, d = 6 and R = 120, r = 50,
+   d = 60 draw the same picture.
 
    SAVING A PDF
 
@@ -178,16 +183,19 @@ int greatestCommonDivisor(int a, int b) {
    TRY THESE (change a line, press PLAY, see what's different):
 
      // -------------------------------------------------
-     // replace R and r with these
+     // replace R, r and d with these
 
-     float R = 3;
-     float r = 1;     // 3 points
+     int R = 3;
+     int r = 1;
+     float d = 2;     // 3 loops
 
-     float R = 7;
-     float r = 3;     // 7 / 3
+     int R = 7;
+     int r = 3;
+     float d = 4;     // 7 / 3
 
-     float R = 1;
-     float r = 1;     // a cardioid
+     int R = 1;
+     int r = 1;
+     float d = 1;     // a cardioid
 
      // -------------------------------------------------
      // replace pageMargin = 72; with this
