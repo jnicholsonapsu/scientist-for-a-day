@@ -170,11 +170,14 @@ void draw() {
 
    TRY THESE (change a line, press PLAY, see what's different):
 
-     int pointTwoSpeed = 3;    // two bumps
+     int pointOneSpeed = 2;
+     int pointTwoSpeed = 3;
 
-     int pointTwoSpeed = 4;    // three bumps
+     int pointOneSpeed = 3;
+     int pointTwoSpeed = 5;
 
-     int pointTwoSpeed = 10;
+     int pointOneSpeed = 2;
+     int pointTwoSpeed = 7;
 
      int numberOfPoints = 200;   // more lines, smoother curve
 
