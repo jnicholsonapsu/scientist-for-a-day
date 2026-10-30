@@ -59,12 +59,15 @@
      solidDetail             how many patches go each way in
                              the solid
      paperColor              the color of the paper
-     lineColor               the color of the wire frame
+     middleColor             the color around the middle of
+                             the shape
+     endsColor               the color at the top and bottom
+                             of the shape. In between, the
+                             color blends from one to the
+                             other
      lineThickness           how thick the wire frame is
-     surfaceColor            the color of the solid where it
-                             faces the light
      shadowColor             the color of the solid where it
-                             faces away
+                             faces away from the light
 
    THE EQUATIONS
 
@@ -134,7 +137,7 @@ float tiltAngle = 0.5;
 float spinAngle = 0;
 float turnSpeed = 0.01;
 
-boolean drawAsSolid = false;
+boolean drawAsSolid = true;
 
 int numberOfLines = 30;
 int pointsPerLine = 200;
@@ -142,11 +145,11 @@ int solidDetail = 100;
 
 // ---------- THE LOOK ------------------------------------
 color paperColor = color(250, 247, 240);
-color lineColor = color( 50,  70,  90);   // slate
-float lineThickness = 0.5;
+color middleColor = color(110, 160, 200);   // sky blue
+color endsColor = color(230, 110,  80);     // coral
+color shadowColor = color( 20,  40,  70);   // dark navy
 
-color surfaceColor = color(110, 160, 200);   // sky blue
-color shadowColor = color( 20,  40,  70);    // dark navy
+float lineThickness = 0.5;
 
 // ---------- WORKED OUT FROM THE NUMBERS ABOVE -----------
 float centerX = pageWidth / 2;
@@ -298,15 +301,38 @@ void drawWireFrame() {
   }
 
   noFill();
-  stroke(lineColor);
   strokeWeight(lineThickness);
-  for (int lineNumber = 0; lineNumber < 2 * numberOfLines; lineNumber++) {
+
+  // the lines going around are each at one height, so each is
+  // one color
+  for (int lineNumber = 0; lineNumber < numberOfLines; lineNumber++) {
+    stroke(colorAtPhi(-HALF_PI + PI * (lineNumber + 0.5) / numberOfLines));
     beginShape();
     for (int pointNumber = 0; pointNumber <= pointsPerLine; pointNumber++) {
       vertex(pageX(points[lineNumber][pointNumber]), pageY(points[lineNumber][pointNumber]));
     }
     endShape();
   }
+
+  // The lines going from bottom to top change color along the
+  // way, so each short piece is drawn on its own, in the color
+  // for its height. A PDF can only give a line one color
+  for (int lineNumber = numberOfLines; lineNumber < 2 * numberOfLines; lineNumber++) {
+    for (int pointNumber = 0; pointNumber < pointsPerLine; pointNumber++) {
+      stroke(colorAtPhi(-HALF_PI + PI * (pointNumber + 0.5) / pointsPerLine));
+      PVector start = points[lineNumber][pointNumber];
+      PVector end = points[lineNumber][pointNumber + 1];
+      line(pageX(start), pageY(start), pageX(end), pageY(end));
+    }
+  }
+}
+
+// The color for a height on the shape: middleColor at the
+// middle (phi = 0), endsColor at the top and bottom (phi =
+// HALF_PI and -HALF_PI), and blended in between. The colors
+// stay with the shape as it turns
+color colorAtPhi(float phi) {
+  return lerpColor(middleColor, endsColor, abs(phi) / HALF_PI);
 }
 
 // The surface, cut into small four-sided patches. Each patch
@@ -329,8 +355,10 @@ void drawSolid() {
   ArrayList<Patch> patches = new ArrayList<Patch>();
   for (int row = 0; row < solidDetail; row++) {
     for (int column = 0; column < solidDetail; column++) {
+      float middlePhi = -HALF_PI + PI * (row + 0.5) / solidDetail;
       patches.add(new Patch(points[row][column], points[row][column + 1],
-                            points[row + 1][column + 1], points[row + 1][column]));
+                            points[row + 1][column + 1], points[row + 1][column],
+                            colorAtPhi(middlePhi)));
     }
   }
 
@@ -360,7 +388,7 @@ void drawSolid() {
       facing.mult(-1);
     }
     float brightness = max(0, facing.dot(light));
-    color patchColor = lerpColor(shadowColor, surfaceColor, brightness);
+    color patchColor = lerpColor(shadowColor, patch.baseColor, brightness);
 
     // the outline in the same color hides tiny gaps between
     // patches
@@ -380,10 +408,12 @@ void drawSolid() {
 class Patch implements Comparable<Patch> {
   PVector[] corners;
   float distance;
+  color baseColor;   // its color before shading
 
-  Patch(PVector corner1, PVector corner2, PVector corner3, PVector corner4) {
+  Patch(PVector corner1, PVector corner2, PVector corner3, PVector corner4, color patchBaseColor) {
     corners = new PVector[] {corner1, corner2, corner3, corner4};
     distance = (corner1.z + corner2.z + corner3.z + corner4.z) / 4;
+    baseColor = patchBaseColor;
   }
 
   public int compareTo(Patch other) {
@@ -438,7 +468,7 @@ float superformula(float angle, float m, float n1, float n2, float n3) {
      float upDownN2 = 15;
      float upDownN3 = 15;
 
-     boolean drawAsSolid = true;   // a shaded solid
+     boolean drawAsSolid = false;  // a see-through wire frame
 
      float turnSpeed = 0.03;    // turns faster
 

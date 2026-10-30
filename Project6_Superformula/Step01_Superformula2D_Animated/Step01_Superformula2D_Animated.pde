@@ -27,6 +27,7 @@
 
      m, n1, n2, n3,
      a, b              the numbers to start with
+     smallestM         the smallest m it can change to
      biggestM          the biggest m it can change to
      smallestN         the smallest n1, n2 or n3 it can
                        change to
@@ -65,6 +66,12 @@
    point is 1. That doesn't change the shape, and the drawing
    is made to fit the margins anyway.
 
+   With a negative n2 or n3 and a negative n1, r is infinite
+   wherever cos(m * phi / 4) or sin(m * phi / 4) is 0: a
+   negative power of 0 is infinite. Those points can't be
+   drawn, so the line is broken there, and the points next to
+   them stretch out into long spikes.
+
    =========================================================== */
 
 // ---------- THE PAGE ------------------------------------
@@ -80,13 +87,14 @@ float n3 = 7;
 float a = 1;
 float b = 1;
 
+int smallestM = 1;
 int biggestM = 30;
 float smallestN = 0.05;
 float biggestN = 30;
 float smallestAB = 0.05;
 float biggestAB = 30;
 
-int framesPerChange = 180;
+int framesPerChange = 60;
 int numberOfPoints = 4000;
 
 // ---------- THE LOOK ------------------------------------
@@ -104,6 +112,8 @@ float[] shapeX = new float[numberOfPoints];
 float[] shapeY = new float[numberOfPoints];
 float[] oldLogR = new float[numberOfPoints];
 float[] newLogR = new float[numberOfPoints];
+boolean[] isGap = new boolean[numberOfPoints];   // true where r
+                                                 // is infinite
 
 int changingNumber = -1;   // which number is changing: 0 is m,
                            // 1 is n1, 2 is n2, 3 is n3,
@@ -133,10 +143,11 @@ void startNextChange() {
 
   changeFrom = getValue(changingNumber);
   if (changingNumber == 0) {
-    // a different whole number from 1 to biggestM
+    // a different whole number from smallestM to biggestM.
+    // If there isn't one, m stays the same
     changeTo = changeFrom;
-    while (changeTo == changeFrom) {
-      changeTo = int(random(1, biggestM + 1));
+    for (int tryNumber = 0; tryNumber < 100 && changeTo == changeFrom; tryNumber++) {
+      changeTo = int(random(smallestM, biggestM + 1));
     }
   } else if (changingNumber <= 3) {
     changeTo = random(smallestN, biggestN);
@@ -153,49 +164,84 @@ void draw() {
   float along = (1 - cos(PI * changeFrame / framesPerChange)) / 2;
 
   // work out log(r) for every point, for the shape with the
-  // old value and the shape with the new one
+  // old value and the shape with the new one. Points where r
+  // is infinite are left out when finding the biggest
   setValue(changingNumber, changeFrom);
   float biggestOldLogR = -Float.MAX_VALUE;
   for (int pointNumber = 0; pointNumber < numberOfPoints; pointNumber++) {
     oldLogR[pointNumber] = superformulaLogR(pointPhi(pointNumber));
-    biggestOldLogR = max(biggestOldLogR, oldLogR[pointNumber]);
+    if (isFinite(oldLogR[pointNumber])) {
+      biggestOldLogR = max(biggestOldLogR, oldLogR[pointNumber]);
+    }
   }
   setValue(changingNumber, changeTo);
   float biggestNewLogR = -Float.MAX_VALUE;
   for (int pointNumber = 0; pointNumber < numberOfPoints; pointNumber++) {
     newLogR[pointNumber] = superformulaLogR(pointPhi(pointNumber));
-    biggestNewLogR = max(biggestNewLogR, newLogR[pointNumber]);
+    if (isFinite(newLogR[pointNumber])) {
+      biggestNewLogR = max(biggestNewLogR, newLogR[pointNumber]);
+    }
   }
 
   // Scale both shapes so their farthest point is 1. That
   // doesn't change their shapes, and turns log(r) back into a
-  // number that fits. Then blend the old shape into the new one
+  // number that fits. Then blend the old shape into the new
+  // one, and find how far the shape reaches
+  float smallestX = Float.MAX_VALUE;
+  float biggestX = -Float.MAX_VALUE;
+  float smallestY = Float.MAX_VALUE;
+  float biggestY = -Float.MAX_VALUE;
   for (int pointNumber = 0; pointNumber < numberOfPoints; pointNumber++) {
-    float oldR = exp(oldLogR[pointNumber] - biggestOldLogR);
-    float newR = exp(newLogR[pointNumber] - biggestNewLogR);
-    float r = lerp(oldR, newR, along);
-    float phi = pointPhi(pointNumber);
-    shapeX[pointNumber] = r * cos(phi);
-    shapeY[pointNumber] = r * sin(phi);
+    isGap[pointNumber] = !isFinite(oldLogR[pointNumber]) || !isFinite(newLogR[pointNumber]);
+    if (!isGap[pointNumber]) {
+      float oldR = exp(oldLogR[pointNumber] - biggestOldLogR);
+      float newR = exp(newLogR[pointNumber] - biggestNewLogR);
+      float r = lerp(oldR, newR, along);
+      float phi = pointPhi(pointNumber);
+      shapeX[pointNumber] = r * cos(phi);
+      shapeY[pointNumber] = r * sin(phi);
+      smallestX = min(smallestX, shapeX[pointNumber]);
+      biggestX = max(biggestX, shapeX[pointNumber]);
+      smallestY = min(smallestY, shapeY[pointNumber]);
+      biggestY = max(biggestY, shapeY[pointNumber]);
+    }
   }
-
-  // as big as fits inside the margins, without stretching
-  float zoom = min((pageWidth - 2 * pageMargin) / (max(shapeX) - min(shapeX)),
-                   (pageHeight - 2 * pageMargin) / (max(shapeY) - min(shapeY)));
-  float middleX = (min(shapeX) + max(shapeX)) / 2;
-  float middleY = (min(shapeY) + max(shapeY)) / 2;
 
   background(paperColor);
-  noFill();
-  stroke(lineColor);
-  strokeWeight(lineThickness);
 
-  beginShape();
-  for (int pointNumber = 0; pointNumber < numberOfPoints; pointNumber++) {
-    vertex(centerX + zoom * (shapeX[pointNumber] - middleX),
-           centerY - zoom * (shapeY[pointNumber] - middleY));
+  // Draw the shape, unless there is nothing to draw: every
+  // point is a gap, or the shape has no size
+  if (biggestX > smallestX && biggestY > smallestY) {
+    // as big as fits inside the margins, without stretching
+    float zoom = min((pageWidth - 2 * pageMargin) / (biggestX - smallestX),
+                     (pageHeight - 2 * pageMargin) / (biggestY - smallestY));
+    float middleX = (smallestX + biggestX) / 2;
+    float middleY = (smallestY + biggestY) / 2;
+
+    noFill();
+    stroke(lineColor);
+    strokeWeight(lineThickness);
+
+    // The line is broken at each gap. Without gaps, it is
+    // closed into a loop
+    boolean hasGaps = false;
+    beginShape();
+    for (int pointNumber = 0; pointNumber < numberOfPoints; pointNumber++) {
+      if (isGap[pointNumber]) {
+        hasGaps = true;
+        endShape();
+        beginShape();
+      } else {
+        vertex(centerX + zoom * (shapeX[pointNumber] - middleX),
+               centerY - zoom * (shapeY[pointNumber] - middleY));
+      }
+    }
+    if (hasGaps) {
+      endShape();
+    } else {
+      endShape(CLOSE);
+    }
   }
-  endShape(CLOSE);
 
   // the number shown for the changing one is partway between
   // its old and new values
@@ -210,6 +256,15 @@ void draw() {
   if (changeFrame == framesPerChange) {
     startNextChange();
   }
+}
+
+// true if log(r) is a number that can be drawn. It is false
+// for an infinite r (log(r) is infinite too) and for NaN
+// (not a number), which comes from things like 0 times
+// infinity. An r of 0 has a log(r) of minus infinity, which
+// is fine
+boolean isFinite(float logR) {
+  return logR < Float.POSITIVE_INFINITY;
 }
 
 // The angle phi for a point. It goes around twice
@@ -271,9 +326,11 @@ void setValue(int valueNumber, float value) {
 /* ===========================================================
    TRY THESE (change a value, press PLAY, see what's different):
 
-     int framesPerChange = 60;    // faster changes
+     int framesPerChange = 180;   // slower changes
 
      int biggestM = 8;            // fewer points and bumps
+
+     int smallestM = 10;          // always lots of points
 
      float smallestN = 1;         // softer, rounder shapes
      float biggestN = 3;

@@ -39,6 +39,7 @@
      upDownN2, upDownN3,
      upDownA, upDownB        the "upDown" numbers to start
                              with, seen from the side
+     smallestM               the smallest m it can change to
      biggestM                the biggest m it can change to
      smallestN               the smallest n it can change to
      biggestN                the biggest n it can change to
@@ -59,12 +60,15 @@
                              every linesEvery-th row and
                              column of patches
      paperColor              the color of the paper
-     lineColor               the color of the wire frame
+     middleColor             the color around the middle of
+                             the shape
+     endsColor               the color at the top and bottom
+                             of the shape. In between, the
+                             color blends from one to the
+                             other
      lineThickness           how thick the wire frame is
-     surfaceColor            the color of the solid where it
-                             faces the light
      shadowColor             the color of the solid where it
-                             faces away
+                             faces away from the light
      textColor               the color of the numbers at the
                              bottom
 
@@ -93,6 +97,11 @@
    Step 1's animation, and scales r1 and r2 so their biggest
    values are 1. That doesn't change the shape.
 
+   With a negative n2 or n3 and a negative n1, r is infinite
+   in some places, like Step 1's animation. Those places are
+   left as holes: the wire frame is broken there, and the
+   solid leaves out the patches that touch them.
+
    The turning works like Step 3: three arrows, across, up
    and away, keep track of how the shape is turned, and each
    turn moves two of them around the third.
@@ -119,6 +128,7 @@ float upDownN3 = 1.7;
 float upDownA = 1;
 float upDownB = 1;
 
+int smallestM = 1;
 int biggestM = 30;
 float smallestN = 0.05;
 float biggestN = 30;
@@ -137,11 +147,11 @@ int linesEvery = 4;
 
 // ---------- THE LOOK ------------------------------------
 color paperColor = color(250, 247, 240);
-color lineColor = color( 50,  70,  90);   // slate
-float lineThickness = 0.5;
+color middleColor = color(110, 160, 200);   // sky blue
+color endsColor = color(230, 110,  80);     // coral
+color shadowColor = color( 20,  40,  70);   // dark navy
 
-color surfaceColor = color(110, 160, 200);   // sky blue
-color shadowColor = color( 20,  40,  70);    // dark navy
+float lineThickness = 0.5;
 
 color textColor = color(0, 0, 0);
 
@@ -200,13 +210,17 @@ void startNextChange() {
 
   changeFrom = getValue(changingNumber);
   if (changingNumber == 0 || changingNumber == 6) {
-    // a different whole number from 1 to biggestM. If the
-    // "around" a and b are different, the "around" m must be
-    // even
+    // a different whole number from smallestM to biggestM.
+    // If the "around" a and b are different, the "around" m
+    // must be even. If there isn't one, m stays the same
     boolean mustBeEven = changingNumber == 0 && aroundA != aroundB;
     changeTo = changeFrom;
-    while (changeTo == changeFrom || (mustBeEven && changeTo % 2 == 1)) {
-      changeTo = int(random(1, biggestM + 1));
+    for (int tryNumber = 0; tryNumber < 100; tryNumber++) {
+      float tryM = int(random(smallestM, biggestM + 1));
+      if (tryM != changeFrom && !(mustBeEven && tryM % 2 == 1)) {
+        changeTo = tryM;
+        break;
+      }
     }
   } else if (changingNumber == 4 || changingNumber == 5 ||
              changingNumber == 10 || changingNumber == 11) {
@@ -248,6 +262,12 @@ void draw() {
     for (int column = 0; column <= gridSize; column++) {
       float theta = -PI + TWO_PI * column / gridSize;
       float r1 = lerp(oldAroundR[column], newAroundR[column], along);
+      // a hole where r1 or r2 is infinite (see radii())
+      if (Float.isNaN(r1) || Float.isNaN(r2)) {
+        points[row][column] = null;
+        continue;
+      }
+
       float x = r1 * cos(theta) * r2 * cos(phi);
       float y = r1 * sin(theta) * r2 * cos(phi);
       float z = r2 * sin(phi);
@@ -270,10 +290,14 @@ void draw() {
   zoom = lerp(zoom, newZoom, 0.1);
   zoom = min(zoom, newZoom);
 
+  // if every point is a hole, or the shape has no size,
+  // there is nothing to draw
+  boolean somethingToDraw = farthest > 0;
+
   background(paperColor);
-  if (drawAsSolid) {
+  if (somethingToDraw && drawAsSolid) {
     drawSolid();
-  } else {
+  } else if (somethingToDraw) {
     drawWireFrame();
   }
 
@@ -297,7 +321,13 @@ void draw() {
 }
 
 // r1 for every theta (around is true) or r2 for every phi
-// (around is false), scaled so the biggest is 1
+// (around is false), scaled so the biggest is 1.
+//
+// With a negative n2 or n3 and a negative n1, r is infinite
+// wherever cos(m * angle / 4) or sin(m * angle / 4) is 0: a
+// negative power of 0 is infinite. Those can't be drawn, so
+// they are left out when finding the biggest, and set to NaN
+// (not a number), which marks a hole in the shape
 float[] radii(boolean around) {
   float[] logR = new float[gridSize + 1];
   float biggestLogR = -Float.MAX_VALUE;
@@ -309,14 +339,28 @@ float[] radii(boolean around) {
       float phi = -HALF_PI + PI * step / gridSize;
       logR[step] = superformulaLogR(phi, upDownM, upDownN1, upDownN2, upDownN3, upDownA, upDownB);
     }
-    biggestLogR = max(biggestLogR, logR[step]);
+    if (isFinite(logR[step])) {
+      biggestLogR = max(biggestLogR, logR[step]);
+    }
   }
 
   float[] r = new float[gridSize + 1];
   for (int step = 0; step <= gridSize; step++) {
-    r[step] = exp(logR[step] - biggestLogR);
+    if (isFinite(logR[step])) {
+      r[step] = exp(logR[step] - biggestLogR);
+    } else {
+      r[step] = Float.NaN;
+    }
   }
   return r;
+}
+
+// true if log(r) is a number that can be drawn. It is false
+// for an infinite r (log(r) is infinite too) and for NaN,
+// which comes from things like 0 times infinity. An r of 0
+// has a log(r) of minus infinity, which is fine
+boolean isFinite(float logR) {
+  return logR < Float.POSITIVE_INFINITY;
 }
 
 // log(r) for an angle, worked out with logs like Step 1's
@@ -344,26 +388,40 @@ float pageY(PVector point) {
   return centerY - zoom * point.y;
 }
 
-// A line along every linesEvery-th row and column of the grid
+// A line along every linesEvery-th row and column of the
+// grid. Each line is broken where there is a hole
 void drawWireFrame() {
   noFill();
-  stroke(lineColor);
   strokeWeight(lineThickness);
 
-  // going around, at one height
+  // going around, at one height, so all one color
   for (int row = linesEvery / 2; row < gridSize; row = row + linesEvery) {
+    stroke(colorAtRow(row));
     beginShape();
     for (int column = 0; column <= gridSize; column++) {
-      vertex(pageX(points[row][column]), pageY(points[row][column]));
+      if (points[row][column] == null) {
+        endShape();
+        beginShape();
+      } else {
+        vertex(pageX(points[row][column]), pageY(points[row][column]));
+      }
     }
     endShape();
   }
 
-  // going from bottom to top, at one angle around
+  // going from bottom to top, at one angle around. Setting
+  // stroke() before each vertex blends the color along the
+  // line
   for (int column = 0; column < gridSize; column = column + linesEvery) {
     beginShape();
     for (int row = 0; row <= gridSize; row++) {
-      vertex(pageX(points[row][column]), pageY(points[row][column]));
+      if (points[row][column] == null) {
+        endShape();
+        beginShape();
+      } else {
+        stroke(colorAtRow(row));
+        vertex(pageX(points[row][column]), pageY(points[row][column]));
+      }
     }
     endShape();
   }
@@ -375,8 +433,13 @@ void drawSolid() {
   ArrayList<Patch> patches = new ArrayList<Patch>();
   for (int row = 0; row < gridSize; row++) {
     for (int column = 0; column < gridSize; column++) {
-      patches.add(new Patch(points[row][column], points[row][column + 1],
-                            points[row + 1][column + 1], points[row + 1][column]));
+      // patches touching a hole are left out
+      if (points[row][column] != null && points[row][column + 1] != null &&
+          points[row + 1][column + 1] != null && points[row + 1][column] != null) {
+        patches.add(new Patch(points[row][column], points[row][column + 1],
+                              points[row + 1][column + 1], points[row + 1][column],
+                              colorAtRow(row + 0.5)));
+      }
     }
   }
   java.util.Collections.sort(patches);
@@ -397,7 +460,7 @@ void drawSolid() {
       facing.mult(-1);
     }
     float brightness = max(0, facing.dot(light));
-    color patchColor = lerpColor(shadowColor, surfaceColor, brightness);
+    color patchColor = lerpColor(shadowColor, patch.baseColor, brightness);
 
     fill(patchColor);
     stroke(patchColor);
@@ -410,19 +473,31 @@ void drawSolid() {
   }
 }
 
-// One four-sided patch of the surface, as in Step 2
+// One four-sided patch of the surface, as in Step 2, with
+// its color before shading
 class Patch implements Comparable<Patch> {
   PVector[] corners;
   float distance;
+  color baseColor;
 
-  Patch(PVector corner1, PVector corner2, PVector corner3, PVector corner4) {
+  Patch(PVector corner1, PVector corner2, PVector corner3, PVector corner4, color patchBaseColor) {
     corners = new PVector[] {corner1, corner2, corner3, corner4};
     distance = (corner1.z + corner2.z + corner3.z + corner4.z) / 4;
+    baseColor = patchBaseColor;
   }
 
   public int compareTo(Patch other) {
     return Float.compare(other.distance, distance);
   }
+}
+
+// The color for a row of the grid: middleColor at the middle
+// row, endsColor at the top and bottom rows, and blended in
+// between. The colors stay with the shape as it turns
+color colorAtRow(float row) {
+  float half = gridSize / 2.0;
+  float distanceFromMiddle = abs(row - half) / half;
+  return lerpColor(middleColor, endsColor, distanceFromMiddle);
 }
 
 // Turns two of the arrows by an angle, around the third one
@@ -504,13 +579,15 @@ void setValue(int valueNumber, float value) {
 /* ===========================================================
    TRY THESE (change a value, press PLAY, see what's different):
 
-     boolean drawAsSolid = true;   // a shaded solid
+     boolean drawAsSolid = false;  // a see-through wire frame
 
      int framesPerChange = 60;     // faster changes
 
      float turnSpeed = 0.03;       // turns faster
 
      int biggestM = 8;             // fewer points and bumps
+
+     int smallestM = 10;           // always lots of points
 
      float smallestN = 1;          // softer, rounder shapes
      float biggestN = 3;
